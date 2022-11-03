@@ -1,32 +1,22 @@
+import Header from "./components/header.jsx";
+import { Link, useLoaderData } from "@remix-run/react";
+import { getLoggedUser, requireUserSession } from "~/session.server";
+import connectDb from "~/db/connectDb.server";
+
+export const loader = async ({ request }) => {
+  const userId = await getLoggedUser(request);
+  const db = await connectDb();
+  
+  return {userId};
+};
+
 export default function Index() {
+  const {userId} = useLoaderData();
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
-      <h1>Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
+    <div>
+      <Header />
+      <Link to="/services/logout">Logout</Link>
+      <p>{userId}</p>
     </div>
   );
 }
