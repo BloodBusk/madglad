@@ -14,9 +14,3 @@
       return fieldName + " has to be greater than 3 characters";
     }
   };
-
-  export const validateUserAlreadyExists = (email, dbEmail) => {
-    if (email === dbEmail) {
-      return "Email already exists";
-    }
-  };

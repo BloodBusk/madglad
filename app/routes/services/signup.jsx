@@ -3,7 +3,10 @@ import { useLoaderData, useActionData, Form } from "@remix-run/react";
 import { setSession, setCookieSecret } from "~/session.server.js";
 import * as bcrypt from "bcryptjs";
 import connectDb from "~/db/connectDb.server.js";
-import { validateEmptyField, validateRepeatPassword, validateUserAlreadyExists } from "../services/validate.jsx";
+import {
+  validateEmptyField,
+  validateRepeatPassword,
+} from "../services/validate.jsx";
 
 // export const links = () => [
 //   {
@@ -35,27 +38,47 @@ export const action = async ({ request }) => {
     email: validateEmptyField(email, "Email"),
     password: validateEmptyField(password, "Password"),
     repeatPwd: validateRepeatPassword(password, repeatPwd),
-    userAlreadyExists: validateUserAlreadyExists(email, users.email),
   };
-  if (Object.values(formErrors).some(Boolean)) {
-    return { formErrors };
+
+  try {
+    if (Object.values(formErrors).some(Boolean)) {
+      return { formErrors };
+    }
+    //creates user
+    const newUser = await db.models.User.create({
+      email: email,
+      username: username,
+      password: hashPassword,
+    });
+    newUser.set("timestamps", true);
+
+    // creates user profile
+    await db.models.Profile.create({
+      isRestaurant: false,
+      isVerified: false,
+      profileImg: "",
+      facebook: "",
+      instagram: "",
+      twitter: "",
+      tiktok: "",
+      followers: [],
+      following: [],
+      tags: [],
+      menuImg: "",
+      bookingLink: "",
+      geolocation: "",
+      userId: newUser._id,
+    })
+  } catch (err) {
+    return json({ userAlreadyExists: "User Already Exists " });
   }
-
-  //creates user
-  const newUser = await db.models.User.create({
-    username: username,
-    email: email,
-    password: hashPassword,
-  });
-  newUser.set("timestamps", true);
-
-  
 
   if (users) {
     return setSession(request, users._id);
   } else {
-    return json({ findUserErrorMessage: "user not found" });
+    return redirect("/services/login");
   }
+  
 };
 
 export default function Signup() {
@@ -80,7 +103,8 @@ export default function Signup() {
           <button type="submit" name="signup">
             Signup
           </button>
-          <p>{actionData?.formErrors?.userAlreadyExists}</p>
+          <p>{actionData?.userAlreadyExists}</p>
+          <p>{actionData?.userNotFound}</p>
         </Form>
       </div>
     </>

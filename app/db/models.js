@@ -3,8 +3,8 @@ import { mongoose } from "mongoose";
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-  username: String,
   email: String,
+  username: String,
   password: String,
 });
 
@@ -12,13 +12,16 @@ const profileSchema = new Schema({
   isRestaurant: Boolean,
   isVerified: Boolean,
   profileImg: String,
-  socialMedia: Array,
+  facebook: String,
+  instagram: String,
+  twitter: String,
+  tiktok: String,
   followers: Array,
   following: Array,
   tags: Array,
   menuImg: String,
   bookingLink: String,
-  Geolocation: String,
+  geolocation: String,
   userId: {type:Schema.Types.ObjectId, ref:"User"}
 },{
   timestamps: true,
