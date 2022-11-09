@@ -6,7 +6,7 @@ import { redirect, json } from "@remix-run/node";
 export default function footerNav({profile}) {
   return (
     <div>
-      <Link to={`../profile/${profile._id}`}>Profile</Link>
+      <Link to={`../profile/${profile}`}>Profile</Link>
     </div>
   );
 }
