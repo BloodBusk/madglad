@@ -3,13 +3,14 @@ import { Link, useLoaderData, Outlet, Form } from "@remix-run/react";
 import { json, redirect } from "@remix-run/node";
 import connectDb from "~/db/connectDb.server.js";
 import { requireUserSession, destroySession } from "~/session.server.js";
+import {findUserById, findProfileByUser} from "~/db/dbF";
 
 export async function loader({ request }) {
   const session = await requireUserSession(request);
   const userId = session.get("userId");
   const db = await connectDb();
-  const user = await db.models.User.findById(userId);
-  const profile = await db.models.Profile.findOne({ userId: user._id });
+  const user = await findUserById(db, userId);
+  const profile = await findProfileByUser(db, user);
   return { profile, user };
 }
 

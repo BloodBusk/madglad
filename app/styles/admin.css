@@ -1,0 +1,17 @@
+.adminUserContainer{
+}
+
+.adminUserContainer div {
+    margin: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.adminUserContainer div p{
+    margin-right: 10px;
+    width: 10%;
+}
+
+.adminUserContainer div input{
+    width: 200px;
+}

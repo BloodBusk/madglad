@@ -7,6 +7,7 @@ import {
   validateEmptyField,
   validateRepeatPassword,
 } from "../services/validate.jsx";
+import { useState } from "react";
 
 // export const links = () => [
 //   {
@@ -28,6 +29,7 @@ export const action = async ({ request }) => {
   const password = form.get("password");
   const repeatPwd = form.get("repeatPwd");
   const hashPassword = await bcrypt.hash(password, 10);
+  const isRestaurant = form.get("isRestaurant");
 
   //user variable
   const users = await db.models.User.findOne({ email: email });
@@ -54,7 +56,7 @@ export const action = async ({ request }) => {
 
     // creates user profile
     await db.models.Profile.create({
-      isRestaurant: false,
+      isRestaurant: isRestaurant,
       isVerified: false,
       profileImg: "",
       facebook: "",
@@ -68,7 +70,7 @@ export const action = async ({ request }) => {
       bookingLink: "",
       geolocation: "",
       userId: newUser._id,
-    })
+    });
   } catch (err) {
     return json({ userAlreadyExists: "User Already Exists " });
   }
@@ -78,34 +80,59 @@ export const action = async ({ request }) => {
   } else {
     return redirect("/services/login");
   }
-  
 };
 
 export default function Signup() {
   const actionData = useActionData();
+  const [userType, setUserType] = useState("");
+
+  const handleUserType = (e) => {
+    setUserType(e.target.value);
+  };
   return (
     <>
       <div>
-        <Form method="post">
-          <h1>Signup</h1>
-          <label>Username</label>
-          <input type="text" name="username" />
-          <p>{actionData?.formErrors?.username}</p>
-          <label>Email</label>
-          <input type="email" name="email" />
-          <p>{actionData?.formErrors?.email}</p>
-          <label>Password</label>
-          <input type="password" name="password" />
-          <p>{actionData?.formErrors?.password}</p>
-          <label>Repeat Password</label>
-          <input type="password" name="repeatPwd" />
-          <p>{actionData?.formErrors?.repeatPwd}</p>
-          <button type="submit" name="signup">
-            Signup
-          </button>
-          <p>{actionData?.userAlreadyExists}</p>
-          <p>{actionData?.userNotFound}</p>
-        </Form>
+        {userType !== "" ? (
+          <Form method="post">
+            <h1>Signup</h1>
+            <label>{userType}</label>
+            <input type="text" name="username" />
+            <p>{actionData?.formErrors?.username}</p>
+            <label>Email</label>
+            <input type="email" name="email" />
+            <p>{actionData?.formErrors?.email}</p>
+            <label>Password</label>
+            <input type="password" name="password" />
+            <p>{actionData?.formErrors?.password}</p>
+            <label>Repeat Password</label>
+            <input type="password" name="repeatPwd" />
+            <p>{actionData?.formErrors?.repeatPwd}</p>
+            <button type="submit" name="signup">
+              Signup
+            </button>
+            <p>{actionData?.userAlreadyExists}</p>
+            <p>{actionData?.userNotFound}</p>
+            {/* hidden variable to keep track of is restaurant or not, tracked in a usestate */}
+            <input
+              type="hidden"
+              name="isRestaurant"
+              defaultValue={userType == "Username" ? false : true}
+            ></input>
+          </Form>
+        ) : (
+          <div>
+            <button type="button" onClick={handleUserType} value="Username">
+              User
+            </button>
+            <button
+              type="button"
+              onClick={handleUserType}
+              value="Restaurant Name"
+            >
+              Restaurant
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

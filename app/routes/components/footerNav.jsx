@@ -3,10 +3,10 @@ import connectDb from "~/db/connectDb.server.js";
 import { getSession } from "~/session.server.js";
 import { redirect, json } from "@remix-run/node";
 
-export default function footerNav({profile}) {
+export default function footerNav({user}) {
   return (
     <div>
-      <Link to={`../profile/${profile}`}>Profile</Link>
+      <Link to={`../profile/${user}`}>Profile</Link>
     </div>
   );
 }
