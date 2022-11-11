@@ -55,11 +55,11 @@ export const action = async ({ request }) => {
     {
       isRestaurant: false,
       isVerified: false,
-      profileImg: "",
-      facebook: "",
-      instagram: "",
-      twitter: "",
-      tiktok: "",
+      profileImg: "/uploads/gleek-5vHX_g2DggNe-jP3IUY7Fw (1).png",
+      facebook: "https://www.facebook.com/thomas.busk.92",
+      instagram: "https://www.instagram.com/",
+      twitter: "https://twitter.com/Twisted_Chips/status/1589773764698701827",
+      tiktok: "https://www.tiktok.com/foryou?is_copy_url=1&is_from_webapp=v1",
       followers: "",
       following: "",
       tags: [],
@@ -105,7 +105,7 @@ export const action = async ({ request }) => {
   const postArr = [
     {
       title: "title 1",
-      postImg: "",
+      postImg: "/uploads/testImg.jpg",
       tags: [],
       restaurantName: "",
       review: "",
@@ -113,11 +113,11 @@ export const action = async ({ request }) => {
       geolocation: "",
       rating: 3,
       likes: 0,
-      userId: userArr[0]._id,
+      profileId: userArr[0]._id,
     },
     {
       title: "title 2",
-      postImg: "",
+      postImg: "/uploads/testImg.jpg",
       tags: [],
       restaurantName: "",
       review: "",
@@ -125,11 +125,11 @@ export const action = async ({ request }) => {
       geolocation: "",
       rating: 4,
       likes: 0,
-      userId: userArr[1]._id,
+      profileId: userArr[1]._id,
     },
     {
       title: "title 3",
-      postImg: "",
+      postImg: "/uploads/testImg.jpg",
       tags: [],
       restaurantName: "",
       review: "",
@@ -137,11 +137,11 @@ export const action = async ({ request }) => {
       geolocation: "",
       rating: 2,
       likes: 0,
-      userId: userArr[2]._id,
+      profileId: userArr[2]._id,
     },
     {
       title: "title 4",
-      postImg: "",
+      postImg: "/uploads/testImg.jpg",
       tags: [],
       restaurantName: "",
       review: "",
@@ -149,7 +149,7 @@ export const action = async ({ request }) => {
       geolocation: "",
       rating: 2,
       likes: 0,
-      userId: userArr[2]._id,
+      profileId: userArr[2]._id,
     },
   ];
 
@@ -175,7 +175,7 @@ export const action = async ({ request }) => {
     await db.models.User.insertMany(userArr);
     await db.models.Profile.insertMany(profileArr);
     await db.models.Post.insertMany(postArr);
-    return null;
+    return redirect("/services/logout");
   }
 };
 

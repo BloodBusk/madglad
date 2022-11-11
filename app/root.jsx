@@ -1,3 +1,4 @@
+import style from "~/styles/global.css";
 const {
   Links,
   LiveReload,
@@ -6,6 +7,13 @@ const {
   Scripts,
   ScrollRestoration,
 } = require("@remix-run/react");
+
+export const links = () => [
+  {
+    rel: "stylesheet",
+    href: style,
+  },
+];
 
 export const meta = () => ({
   charset: "utf-8",

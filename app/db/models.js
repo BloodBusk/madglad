@@ -37,7 +37,7 @@ const postSchema = new Schema({
   geolocation: String,
   rating: String,
   likes: Number,
-  userId: {type:Schema.Types.ObjectId, ref:"User"}
+  profileId: {type:Schema.Types.ObjectId, ref:"Profile"}
 },{
   timestamps: true,
 });

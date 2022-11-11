@@ -8,7 +8,7 @@ export default function Header({profile}) {
     <div>
       <h1>Mad Glad</h1>
       <Link to="/services/logout">Logout</Link>
-      <img href={profile.profileImg} alt="" />
+      <img src={profile.profileImg} alt="profile img" className="profileImgHeader" />
     </div>
   );
 }
