@@ -45,7 +45,7 @@ export default function UserProfileId() {
   const { profile, user, posts, postsCount } = useLoaderData();
   return (
     <div>
-      User Id {profile.userId} {user.username}{" "}
+      User Id {profile.userId} {profile.username}{" "}
       <div>
         <Form method="post">
           <button name="_action" value="createPost" type="submit">

@@ -4,12 +4,15 @@ import { useLoaderData, useActionData, Form } from "@remix-run/react";
 import { requireUserSession } from "~/session.server.js";
 import connectDb from "~/db/connectDb.server.js";
 import { validateEmptyField } from "../services/validate.jsx";
+import { findProfileByUser } from "~/db/dbF";
 
 export async function action({ request }) {
   const session = await requireUserSession(request);
   const userId = session.get("userId");
   const form = await request.formData();
   const db = await connectDb();
+  const profile = findProfileByUser(db, userId);
+
   let { _action, ...values } = Object.fromEntries(form);
 
   //form  variables
@@ -41,7 +44,7 @@ export async function action({ request }) {
         geolocation: "",
         rating: rating,
         likes: 0,
-        userId: userId,
+        profileId: profile._id,
       });
       newPost.set("timestamps", true);
       return redirect("/");

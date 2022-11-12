@@ -1,5 +1,5 @@
 import { redirect, json, createCookie } from "@remix-run/node";
-import { useLoaderData, useActionData, Form } from "@remix-run/react";
+import { useLoaderData, useActionData, Form, Link } from "@remix-run/react";
 import { setSession, setCookieSecret } from "~/session.server.js";
 import * as bcrypt from "bcryptjs";
 import connectDb from "~/db/connectDb.server.js";
@@ -24,7 +24,6 @@ export const action = async ({ request }) => {
   const db = await connectDb();
   //form variables
   const form = await request.formData();
-  const username = form.get("username");
   const email = form.get("email");
   const password = form.get("password");
   const repeatPwd = form.get("repeatPwd");
@@ -36,7 +35,6 @@ export const action = async ({ request }) => {
 
   //form error handling
   const formErrors = {
-    username: validateEmptyField(username, "Username"),
     email: validateEmptyField(email, "Email"),
     password: validateEmptyField(password, "Password"),
     repeatPwd: validateRepeatPassword(password, repeatPwd),
@@ -49,13 +47,13 @@ export const action = async ({ request }) => {
     //creates user
     const newUser = await db.models.User.create({
       email: email,
-      username: username,
       password: hashPassword,
     });
     newUser.set("timestamps", true);
 
     // creates user profile
     await db.models.Profile.create({
+      username: "",
       isRestaurant: isRestaurant,
       isVerified: false,
       profileImg: "",
@@ -95,9 +93,7 @@ export default function Signup() {
         {userType !== "" ? (
           <Form method="post">
             <h1>Signup</h1>
-            <label>{userType}</label>
-            <input type="text" name="username" />
-            <p>{actionData?.formErrors?.username}</p>
+            <h2>{userType}</h2>
             <label>Email</label>
             <input type="email" name="email" />
             <p>{actionData?.formErrors?.email}</p>
@@ -110,24 +106,26 @@ export default function Signup() {
             <button type="submit" name="signup">
               Signup
             </button>
+            <h3>Already Have An Account?</h3>
+            <Link to="/services/login" >Login</Link>
             <p>{actionData?.userAlreadyExists}</p>
             <p>{actionData?.userNotFound}</p>
             {/* hidden variable to keep track of is restaurant or not, tracked in a usestate */}
             <input
               type="hidden"
               name="isRestaurant"
-              defaultValue={userType == "Username" ? false : true}
+              defaultValue={userType == "User" ? false : true}
             ></input>
           </Form>
         ) : (
           <div>
-            <button type="button" onClick={handleUserType} value="Username">
+            <button type="button" onClick={handleUserType} value="User">
               User
             </button>
             <button
               type="button"
               onClick={handleUserType}
-              value="Restaurant Name"
+              value="Restaurant"
             >
               Restaurant
             </button>

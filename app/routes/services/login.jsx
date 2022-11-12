@@ -1,7 +1,7 @@
 import { setSession, setCookieSecret } from "~/session.server.js";
 import * as bcrypt from "bcryptjs";
 import { redirect, json, createCookie } from "@remix-run/node";
-import { useLoaderData, useActionData, Form } from "@remix-run/react";
+import { useLoaderData, useActionData, Form, Link } from "@remix-run/react";
 import connectDb from "~/db/connectDb.server.js";
 import {
   validateEmptyField
@@ -68,6 +68,7 @@ export default function Login() {
           <button type="submit" name="login">
             Login
           </button>
+          <Link to="/services/signup">Signup</Link>
           <p>{actionData?.passwordErrorMessage}</p>
           <p>{actionData?.userErrorMessage}</p>
         </Form>

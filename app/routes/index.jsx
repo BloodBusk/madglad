@@ -11,24 +11,23 @@ export const loader = async ({ request }) => {
   const db = await connectDb();
   const user = await findUserById(db, userId);
   const profile = await findProfileByUser(db, user);
-  const posts = await findAllPosts(db);  
-  const combine = await db.models.Profile.find({}).populate("userId");
-  const combine2 = await db.models.Post.find({}).populate("profileId");
+  const posts = await findAllPosts(db);
+  const postXProfile = await db.models.Post.find().populate("profileId");
 
-  return { profile, user, posts, combine, combine2};
+  return { profile, user, posts, postXProfile };
 };
 
 export default function Index() {
-  const { profile, user, posts, combine, combine2 } = useLoaderData();
-  console.log(combine2);
+  const { profile, user, posts, postXProfile } = useLoaderData();
   return (
     <div>
       <Header profile={profile} />
-      <p>{user.username}</p>
-      {posts.map((post) => {
+      <p>{profile.username}</p>
+      {postXProfile.map((post) => {
         return (
           <div key={post._id}>
-            {post.title} <Link to="">{post.userId} </Link>
+            {post.title} <Link to="">{post.userId} </Link>{" "}
+            {post.profileId.username}
             <Link to={`/posts/${post._id}`}>
               <img className="postImg" src={post.postImg} alt="posts img" />
             </Link>

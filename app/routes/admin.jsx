@@ -26,7 +26,19 @@ export const loader = async ({ request }) => {
   const profileCount = await db.models.Profile.find().count();
   const postCount = await db.models.Post.find().count();
 
-  return { user, profile, post, userCount, profileCount, postCount };
+  const userxProfile = await db.models.Profile.find().populate("userId");
+  const profilexPost = await db.models.Post.find().populate("profileId");
+
+  return {
+    user,
+    profile,
+    post,
+    userCount,
+    profileCount,
+    postCount,
+    userxProfile,
+    profilexPost
+  };
 };
 
 export const action = async ({ request }) => {
@@ -34,25 +46,24 @@ export const action = async ({ request }) => {
     {
       _id: new mongoose.Types.ObjectId(),
       email: "qwe@qwe.com",
-      username: "User 1",
       password: await bcrypt.hash("123", 10),
     },
     {
       _id: new mongoose.Types.ObjectId(),
       email: "asd@asd.com",
-      username: "User 2",
       password: await bcrypt.hash("123", 10),
     },
     {
       _id: new mongoose.Types.ObjectId(),
       email: "zxc@zxc.com",
-      username: "User 3",
       password: await bcrypt.hash("123", 10),
     },
   ];
 
   const profileArr = [
     {
+      _id: new mongoose.Types.ObjectId(),
+      username: "User 1",
       isRestaurant: false,
       isVerified: false,
       profileImg: "/uploads/gleek-5vHX_g2DggNe-jP3IUY7Fw (1).png",
@@ -60,8 +71,8 @@ export const action = async ({ request }) => {
       instagram: "https://www.instagram.com/",
       twitter: "https://twitter.com/Twisted_Chips/status/1589773764698701827",
       tiktok: "https://www.tiktok.com/foryou?is_copy_url=1&is_from_webapp=v1",
-      followers: "",
-      following: "",
+      followers: [],
+      following: [],
       tags: [],
       menuImg: "",
       bookingLink: "",
@@ -69,6 +80,8 @@ export const action = async ({ request }) => {
       userId: userArr[0]._id,
     },
     {
+      _id: new mongoose.Types.ObjectId(),
+      username: "User 2",
       isRestaurant: false,
       isVerified: false,
       profileImg: "",
@@ -76,8 +89,8 @@ export const action = async ({ request }) => {
       instagram: "",
       twitter: "",
       tiktok: "",
-      followers: "",
-      following: "",
+      followers: [],
+      following: [],
       tags: [],
       menuImg: "",
       bookingLink: "",
@@ -85,6 +98,8 @@ export const action = async ({ request }) => {
       userId: userArr[1]._id,
     },
     {
+      _id: new mongoose.Types.ObjectId(),
+      username: "User 3",
       isRestaurant: false,
       isVerified: false,
       profileImg: "",
@@ -92,8 +107,8 @@ export const action = async ({ request }) => {
       instagram: "",
       twitter: "",
       tiktok: "",
-      followers: "",
-      following: "",
+      followers: [],
+      following: [],
       tags: [],
       menuImg: "",
       bookingLink: "",
@@ -104,6 +119,7 @@ export const action = async ({ request }) => {
 
   const postArr = [
     {
+      _id: new mongoose.Types.ObjectId(),
       title: "title 1",
       postImg: "/uploads/testImg.jpg",
       tags: [],
@@ -113,9 +129,10 @@ export const action = async ({ request }) => {
       geolocation: "",
       rating: 3,
       likes: 0,
-      profileId: userArr[0]._id,
+      profileId: profileArr[0]._id,
     },
     {
+      _id: new mongoose.Types.ObjectId(),
       title: "title 2",
       postImg: "/uploads/testImg.jpg",
       tags: [],
@@ -125,9 +142,10 @@ export const action = async ({ request }) => {
       geolocation: "",
       rating: 4,
       likes: 0,
-      profileId: userArr[1]._id,
+      profileId: profileArr[1]._id,
     },
     {
+      _id: new mongoose.Types.ObjectId(),
       title: "title 3",
       postImg: "/uploads/testImg.jpg",
       tags: [],
@@ -137,9 +155,10 @@ export const action = async ({ request }) => {
       geolocation: "",
       rating: 2,
       likes: 0,
-      profileId: userArr[2]._id,
+      profileId: profileArr[2]._id,
     },
     {
+      _id: new mongoose.Types.ObjectId(),
       title: "title 4",
       postImg: "/uploads/testImg.jpg",
       tags: [],
@@ -149,7 +168,7 @@ export const action = async ({ request }) => {
       geolocation: "",
       rating: 2,
       likes: 0,
-      profileId: userArr[2]._id,
+      profileId: profileArr[2]._id,
     },
   ];
 
@@ -180,8 +199,16 @@ export const action = async ({ request }) => {
 };
 
 export default function Admin() {
-  const { user, profile, post, userCount, profileCount, postCount } =
-    useLoaderData();
+  const {
+    user,
+    profile,
+    post,
+    userCount,
+    profileCount,
+    postCount,
+    userxProfile,
+    profilexPost
+  } = useLoaderData();
   return (
     <div>
       <h1>Admin</h1>
@@ -189,16 +216,19 @@ export default function Admin() {
         users: {userCount}, profiles: {profileCount}, posts: {postCount}{" "}
       </p>
       <div className="adminUserContainer">
-        {user.map((u) => {
+        {userxProfile.map((u) => {
           return (
             <div key={u._id}>
               <p>{u.username}</p>
               <Form method="post">
+                <label>Profile Id</label>
+                <input type="text" readOnly={true} defaultValue={u._id}></input>
+                <label>User Id</label>
                 <input
                   type="text"
                   readOnly={true}
                   name="uid"
-                  defaultValue={u._id}
+                  defaultValue={u.userId._id}
                 />
                 <button type="submit" name="_action" value="deleteOne">
                   Delete this

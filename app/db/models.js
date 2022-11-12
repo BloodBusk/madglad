@@ -4,11 +4,11 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema({
   email: String,
-  username: String,
   password: String,
 });
 
 const profileSchema = new Schema({
+  username: String,
   isRestaurant: Boolean,
   isVerified: Boolean,
   profileImg: String,
