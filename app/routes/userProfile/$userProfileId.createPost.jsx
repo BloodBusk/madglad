@@ -40,10 +40,10 @@ export async function action({ request }) {
         tags: tags,
         restaurantName: restaurantName,
         review: review,
-        postVideo: "",
         geolocation: "",
         rating: rating,
         likes: 0,
+        comments: [],
         profileId: profile._id,
       });
       newPost.set("timestamps", true);

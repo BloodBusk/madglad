@@ -1,9 +1,19 @@
 import Header from "./components/header.jsx";
 import FooterNav from "./components/footerNav.jsx";
+import SinglePost from "~/routes/components/singlePost.jsx";
+import style from "~/styles/singlePost.css";
+
 import { Link, useLoaderData } from "@remix-run/react";
 import { getLoggedUser, requireUserSession } from "~/session.server";
 import connectDb from "~/db/connectDb.server";
 import { findUserById, findProfileByUser, findAllPosts } from "~/db/dbF";
+
+export const links = () => [
+  {
+    rel: "stylesheet",
+    href: style,
+  },
+];
 
 export const loader = async ({ request }) => {
   await requireUserSession(request);
@@ -19,18 +29,14 @@ export const loader = async ({ request }) => {
 
 export default function Index() {
   const { profile, user, posts, postXProfile } = useLoaderData();
+  
   return (
     <div>
       <Header profile={profile} />
-      <p>{profile.username}</p>
       {postXProfile.map((post) => {
         return (
           <div key={post._id}>
-            {post.title} <Link to="">{post.userId} </Link>{" "}
-            {post.profileId.username}
-            <Link to={`/posts/${post._id}`}>
-              <img className="postImg" src={post.postImg} alt="posts img" />
-            </Link>
+            <SinglePost post={post} />
           </div>
         );
       })}

@@ -1,3 +1,9 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 .profileImgHeader{
     width: 50px;
     height: 50px;
@@ -9,6 +15,3 @@
     height: 30px;
 }
 
-.postImg{
-    width: 200px;
-}

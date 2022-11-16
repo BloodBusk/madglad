@@ -1,0 +1,48 @@
+.singlePostContainer{
+    width: 95%;
+    margin: 5vh auto;
+}
+
+.singlePostHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.singlePostHeaderLink{
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: black;
+}
+
+.singlePostIconContainer{
+    display: flex;
+    align-items: center;
+}
+.singlePostIconContainer p{
+    margin-right: 5px;
+}
+
+.postImg{
+    width: 100%;
+}
+
+.postIcons{
+    width: 20px;
+    height: 20px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.postDivider{
+    display: inline-block;
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (min-width: 600px) {
+    .singlePostContainer {
+      width: 40%;
+    }
+  }

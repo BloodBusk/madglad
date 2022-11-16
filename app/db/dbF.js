@@ -27,3 +27,8 @@ export const findPostById = async (db, postId) => {
   const post = db.models.Post.findById(postId);
   return post;
 };
+
+export const findProfileById = async (db, profileId) => {
+  const profile = db.models.Profile.findById(profileId);
+  return profile;
+};

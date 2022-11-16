@@ -33,10 +33,10 @@ const postSchema = new Schema({
   tags: Array,
   restaurantName: String,
   review: String,
-  postVideo: String,
   geolocation: String,
   rating: String,
   likes: Number,
+  comments: Array,
   profileId: {type:Schema.Types.ObjectId, ref:"Profile"}
 },{
   timestamps: true,
