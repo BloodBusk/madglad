@@ -6,8 +6,7 @@ import { requireUserSession, destroySession } from "~/session.server.js";
 import {
   findUserById,
   findProfileByUser,
-  findPostsByUser,
-  findPostsCountByUser,
+  findPostsCountByProfile,
 } from "~/db/dbF.js";
 
 import facebook from "~/imgs/facebook-f.svg";
@@ -15,14 +14,16 @@ import instagram from "~/imgs/instagram.svg";
 import twitter from "~/imgs/twitter.svg";
 import tiktok from "~/imgs/tiktok.svg";
 
+import SinglePost from "../components/singlePost";
+
 export async function loader({ request }) {
   const session = await requireUserSession(request);
   const userId = session.get("userId");
   const db = await connectDb();
   const user = await findUserById(db, userId);
   const profile = await findProfileByUser(db, user);
-  const posts = await findPostsByUser(db, user);
-  const postsCount = await findPostsCountByUser(db, user);
+  const posts = await db.models.Post.find({profileId: profile._id}).populate("profileId");
+  const postsCount = await findPostsCountByProfile(db, profile);
   return { profile, user, posts, postsCount };
 }
 
@@ -61,6 +62,9 @@ export default function UserProfileId() {
             />
           </button>
         </Form>
+        <p>
+          {profile.username} {profile.isVerified ? "true" : "false"}
+        </p>
         <div>
           <div>
             <p>Posts</p>
@@ -68,27 +72,48 @@ export default function UserProfileId() {
           </div>
           <div>
             <p>Followers</p>
-            <p>{}</p>
+            <p>{profile.followers.length}</p>
           </div>
           <div>
             <p>Following</p>
-            <p>{}</p>
+            <p>{profile.following.length}</p>
           </div>
         </div>
         <div>
-          <a href={profile.facebook} target="_blank" rel="noreferrer">
-            <img src={facebook} alt="facebook" className="socialIcons" />
-          </a>
-          <a href={profile.instagram} target="_blank" rel="noreferrer">
-            <img src={instagram} alt="instagram" className="socialIcons" />
-          </a>
-          <a href={profile.twitter} target="_blank" rel="noreferrer">
-            <img src={twitter} alt="twitter" className="socialIcons" />
-          </a>
-          <a href={profile.tiktok} target="_blank" rel="noreferrer">
-            <img src={tiktok} alt="tiktok" className="socialIcons" />
-          </a>
+          {profile.facebook !== "" ? (
+            <a href={profile.facebook} target="_blank" rel="noreferrer">
+              <img src={facebook} alt="facebook" className="socialIcons" />
+            </a>
+          ) : (
+            ""
+          )}
+          {profile.instagram !== "" ? (
+            <a href={profile.instagram} target="_blank" rel="noreferrer">
+              <img src={instagram} alt="instagram" className="socialIcons" />
+            </a>
+          ) : (
+            ""
+          )}
+          {profile.twitter !== "" ? (
+            <a href={profile.twitter} target="_blank" rel="noreferrer">
+              <img src={twitter} alt="twitter" className="socialIcons" />
+            </a>
+          ) : (
+            ""
+          )}
+          {profile.tiktok !== "" ? (
+            <a href={profile.tiktok} target="_blank" rel="noreferrer">
+              <img src={tiktok} alt="tiktok" className="socialIcons" />
+            </a>
+          ) : (
+            ""
+          )}
         </div>
+      </div>
+      <div>
+        {posts.map((p) => {
+          return <SinglePost post={p} key={p._id} />;
+        })}
       </div>
     </div>
   );

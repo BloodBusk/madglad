@@ -1,19 +1,13 @@
 import Header from "./components/header.jsx";
 import FooterNav from "./components/footerNav.jsx";
 import SinglePost from "~/routes/components/singlePost.jsx";
-import style from "~/styles/singlePost.css";
 
 import { Link, useLoaderData } from "@remix-run/react";
 import { getLoggedUser, requireUserSession } from "~/session.server";
 import connectDb from "~/db/connectDb.server";
 import { findUserById, findProfileByUser, findAllPosts } from "~/db/dbF";
 
-export const links = () => [
-  {
-    rel: "stylesheet",
-    href: style,
-  },
-];
+
 
 export const loader = async ({ request }) => {
   await requireUserSession(request);

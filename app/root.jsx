@@ -1,4 +1,5 @@
 import style from "~/styles/global.css";
+import style2 from "~/styles/singlePost.css";
 const {
   Links,
   LiveReload,
@@ -12,6 +13,10 @@ export const links = () => [
   {
     rel: "stylesheet",
     href: style,
+  },
+  {
+    rel: "stylesheet",
+    href: style2,
   },
 ];
 

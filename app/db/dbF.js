@@ -8,15 +8,16 @@ export const findProfileByUser = async (db, user) => {
   return profile;
 };
 
-export const findPostsByUser = async (db, user) => {
-  const posts = db.models.Post.find({ userId: user._id });
+export const findPostsByProfile = async (db, profile) => {
+  const posts = db.models.Post.find({ profileId: profile._id });
   return posts;
 };
 
-export const findPostsCountByUser = async (db, user) => {
-  const posts = db.models.Post.find({userId: user._id}).count();
+export const findPostsCountByProfile = async (db, profile) => {
+  const posts = db.models.Post.find({profileId: profile._id}).count();
   return posts;
 };
+
 
 export const findAllPosts = async (db) => {
   const posts = db.models.Post.find();
