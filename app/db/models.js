@@ -37,6 +37,7 @@ const postSchema = new Schema({
   rating: String,
   likes: Number,
   comments: Array,
+  restaurantId: {type:Schema.Types.ObjectId, ref:"Profile"},
   profileId: {type:Schema.Types.ObjectId, ref:"Profile"}
 },{
   timestamps: true,

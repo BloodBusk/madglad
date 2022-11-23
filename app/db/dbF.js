@@ -4,7 +4,7 @@ export const findUserById = async (db, userId) => {
 };
 
 export const findProfileByUser = async (db, user) => {
-  const profile = db.models.Profile.findOne({ userId: user._id});
+  const profile = db.models.Profile.findOne({ userId: user});
   return profile;
 };
 
@@ -23,6 +23,11 @@ export const findAllPosts = async (db) => {
   const posts = db.models.Post.find();
   return posts;
 };
+
+export const findAllRestaurants = async (db) => {
+  const restaurants = db.models.Profile.find({isRestaurant: true});
+  return restaurants;
+}
 
 export const findPostById = async (db, postId) => {
   const post = db.models.Post.findById(postId);

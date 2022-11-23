@@ -2,7 +2,6 @@ import { Form, useLoaderData } from "@remix-run/react";
 import React from "react";
 import connectDb from "~/db/connectDb.server";
 import {
-  findPostById,
   findProfileById,
   findPostsCountByProfile,
   findProfileByUser,
@@ -17,12 +16,11 @@ import SinglePost from "../components/singlePost";
 
 export async function loader({ params }) {
   const db = await connectDb();
-  // const post = await findPostById(db, );
   const profile = await findProfileById(db, params.profileId);
   const postsCount = await findPostsCountByProfile(db, profile);
   const posts = await db.models.Post.find({ profileId: profile._id }).populate(
     "profileId"
-  );
+  ).populate("restaurantId");
   return { profile, postsCount, posts };
 }
 

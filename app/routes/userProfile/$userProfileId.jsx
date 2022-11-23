@@ -1,8 +1,8 @@
-import React from "react";
-import { Link, useLoaderData, Outlet, Form } from "@remix-run/react";
+import React, { useState } from "react";
+import { useLoaderData, Form } from "@remix-run/react";
 import { json, redirect } from "@remix-run/node";
 import connectDb from "~/db/connectDb.server.js";
-import { requireUserSession, destroySession } from "~/session.server.js";
+import { requireUserSession} from "~/session.server.js";
 import {
   findUserById,
   findProfileByUser,
@@ -22,7 +22,9 @@ export async function loader({ request }) {
   const db = await connectDb();
   const user = await findUserById(db, userId);
   const profile = await findProfileByUser(db, user);
-  const posts = await db.models.Post.find({profileId: profile._id}).populate("profileId");
+  const posts = await db.models.Post.find({ profileId: profile._id }).populate(
+    "profileId"
+  );
   const postsCount = await findPostsCountByProfile(db, profile);
   return { profile, user, posts, postsCount };
 }
@@ -34,16 +36,44 @@ export async function action({ request }) {
   let formData = await request.formData();
   let { _action, ...values } = Object.fromEntries(formData);
 
+  let hiddenPostId = formData.get("hiddenPostId");
+
   if (_action === "createPost") {
     return redirect(`/userProfile/${userId}/createPost`);
   }
   if (_action === "changeProfileImg") {
     return redirect(`/services/uploadImg`);
   }
+  if (_action === "deletePost") {
+    try {
+      await db.models.Post.deleteOne({ _id: hiddenPostId });
+      return redirect(`/userProfile/${userId}`);
+    } catch (err) {
+      return json({
+        deletePostErrorMessage: "something went wrong deleting the post",
+      });
+    }
+  }
 }
 
 export default function UserProfileId() {
   const { profile, user, posts, postsCount } = useLoaderData();
+  const [showSettings, setShowSettings] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+
+  const showPostSettings = () => {
+    setShowSettings((showSettings) => !showSettings);
+  };
+
+  const showDeleteOptions = () => {
+    setShowDelete((showDelete) => !showDelete);
+  };
+
+  const handleDeleteNo = () => {
+    setShowDelete(false);
+    setShowSettings(false);
+  };
+
   return (
     <div>
       User Id {profile.userId} {profile.username}{" "}
@@ -112,7 +142,44 @@ export default function UserProfileId() {
       </div>
       <div>
         {posts.map((p) => {
-          return <SinglePost post={p} key={p._id} />;
+          return (
+            <div key={p._id}>
+              <button type="button" onClick={showPostSettings}>
+                | | |
+              </button>
+              {showSettings ? (
+                <>
+                  <button type="button">Edit</button>
+                  <button type="button" onClick={showDeleteOptions}>
+                    Delete
+                  </button>
+                  {showDelete ? (
+                    <>
+                      <Form method="post">
+                        <label>Are you Sure you want to Delete?</label>
+                        <input
+                          type="hidden"
+                          name="hiddenPostId"
+                          defaultValue={p._id}
+                        />
+                        <button type="submit" name="_action" value="deletePost">
+                          Yes
+                        </button>
+                      </Form>
+                      <button type="button" onClick={handleDeleteNo}>
+                        No
+                      </button>
+                    </>
+                  ) : (
+                    ""
+                  )}
+                </>
+              ) : (
+                ""
+              )}
+              <SinglePost post={p} />
+            </div>
+          );
         })}
       </div>
     </div>

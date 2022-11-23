@@ -25,7 +25,7 @@ export async function action({ request }) {
   const fileUploadHandler = unstable_createFileUploadHandler({
     avoidFileConflicts: true,
     maxPartSize: 5_000_000,
-    directory: "./public/uploads",
+    directory: "./public/uploads/profilePics",
     file: ({ filename }) => filename,
   });
   const formData = await unstable_parseMultipartFormData(

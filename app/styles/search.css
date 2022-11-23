@@ -1,0 +1,46 @@
+.searchField {
+  width: 90%;
+  margin: auto;
+}
+
+.searchField input {
+  width: 100%;
+  margin-top: 3vh;
+  padding: 10px;
+  font-size: 20px;
+}
+
+.searchImgContainer {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 4px;
+}
+
+.searchLinks {
+  flex: 50%;
+  max-width: 50%;
+  padding: 0 4px;
+}
+
+.searchImgs {
+  margin-top: 8px;
+  vertical-align: middle;
+  width: 100%;
+}
+
+@media screen and (min-width: 600px) {
+    .searchLinks {
+      flex: 33%;
+      max-width: 33%;
+      padding: 0 4px;
+    }
+  }
+
+@media screen and (min-width: 800px) {
+  .searchLinks {
+    flex: 25%;
+    max-width: 25%;
+    padding: 0 4px;
+  }
+}
+

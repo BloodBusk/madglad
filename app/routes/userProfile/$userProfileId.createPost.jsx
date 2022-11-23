@@ -1,17 +1,31 @@
 import React, { useState } from "react";
-import { redirect, json } from "@remix-run/node";
+import {
+  redirect,
+  json,
+  unstable_createFileUploadHandler,
+  unstable_parseMultipartFormData,
+} from "@remix-run/node";
 import { useLoaderData, useActionData, Form } from "@remix-run/react";
 import { requireUserSession } from "~/session.server.js";
 import connectDb from "~/db/connectDb.server.js";
-import { validateEmptyField } from "../services/validate.jsx";
-import { findProfileByUser } from "~/db/dbF";
+import { findProfileByUser, findAllRestaurants } from "~/db/dbF";
+
+export async function loader({ request }) {
+  const session = await requireUserSession(request);
+  const userId = session.get("userId");
+  const db = await connectDb();
+  const restaurants = await findAllRestaurants(db);
+  const profile = await findProfileByUser(db, userId);
+  return { restaurants, profile };
+}
 
 export async function action({ request }) {
   const session = await requireUserSession(request);
   const userId = session.get("userId");
-  const form = await request.formData();
+  const clonedData = request.clone();
+  const form = await clonedData.formData();
   const db = await connectDb();
-  const profile = findProfileByUser(db, userId);
+  const profile = await findProfileByUser(db, userId);
 
   let { _action, ...values } = Object.fromEntries(form);
 
@@ -21,6 +35,25 @@ export async function action({ request }) {
   let restaurantName = form.get("restaurantName");
   let review = form.get("review");
   let rating = form.get("rating");
+
+  const restaurantProfile = await db.models.Profile.findOne({
+    username: restaurantName,
+  });
+
+  //file handling variables
+  const fileUploadHandler = unstable_createFileUploadHandler({
+    avoidFileConflicts: true,
+    maxPartSize: 5_000_000,
+    directory: "./public/uploads/postPics",
+    file: ({ filename }) => filename,
+  });
+  const formData = await unstable_parseMultipartFormData(
+    request,
+    fileUploadHandler
+  );
+  const pathName = formData.get("upload").filepath;
+  const pathSearch = pathName.search("uploads");
+  const pathString = pathName.slice(pathSearch - 1);
 
   //error handling
   //   const formErrors = {
@@ -36,7 +69,7 @@ export async function action({ request }) {
     try {
       const newPost = await db.models.Post.create({
         title: title,
-        postImg: "",
+        postImg: pathString,
         tags: tags,
         restaurantName: restaurantName,
         review: review,
@@ -44,19 +77,37 @@ export async function action({ request }) {
         rating: rating,
         likes: 0,
         comments: [],
-        profileId: profile._id,
+        restaurantId: restaurantProfile?._id,
+        profileId: profile?._id,
       });
       newPost.set("timestamps", true);
       return redirect("/");
     } catch (err) {
       return json({ errorMessage: "error happened" });
-    }
+    }                     
   }
 }
 
 export default function CreatePost() {
+  const { restaurants, profile } = useLoaderData();
   const [tags, setTags] = useState([]);
   const [input, setInput] = useState([]);
+  const [inputText, setInputText] = useState("");
+  const actionData = useActionData();
+       //search handler for restaurant
+  let inputHandler = (e) => {
+    let lowerCase = e.target.value.toLowerCase();
+    setInputText(lowerCase);
+  };
+
+  //filtering data to see a match for restaurants
+  const filteredData = restaurants?.filter((rest) => {
+    if (inputText === "") {
+      return rest;
+    } else {
+      return rest.username.toLowerCase().includes(inputText);
+    }
+  });
 
   const saveInput = (e) => {
     setInput(e.target.value);
@@ -67,16 +118,28 @@ export default function CreatePost() {
   };
   return (
     <div>
-      <Form method="post">
+      <Form method="post" encType="multipart/form-data">
         <input type="text" name="title" placeholder="title..."></input>
-        {/* geolocation */}
+        {/* todo geolocation */}
         <input
           type="text"
           name="restaurantName"
           placeholder="restaurant name..."
+          list="restaurantList"
+          onChange={inputHandler}
         />
+        <datalist id="restaurantList">
+          {filteredData?.map((fd, i) => {
+            return <option key={i}>{fd.username}</option>;
+          })}
+        </datalist>
+
+        <input type="file" name="upload" />
+
         <input type="text" placeholder="add tags..." onChange={saveInput} />
-        <button type="button" onClick={addToArray}>Add Tag</button>
+        <button type="button" onClick={addToArray}>
+          Add Tag
+        </button>
         {tags?.map((t, i) => {
           return <input key={i} type="text" name="tags" defaultValue={t} />;
         })}
@@ -91,6 +154,7 @@ export default function CreatePost() {
         <button type="submit" name="_action" value="createPost">
           Create Post
         </button>
+        {actionData?.errorMessage}
       </Form>
     </div>
   );

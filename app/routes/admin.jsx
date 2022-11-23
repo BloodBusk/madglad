@@ -114,6 +114,23 @@ export const action = async ({ request }) => {
       bookingLink: "",
       geolocation: "",
       userId: userArr[2]._id,
+    },{
+      _id: new mongoose.Types.ObjectId(),
+      username: "Halleluja Food",
+      isRestaurant: true,
+      isVerified: false,
+      profileImg: "",
+      facebook: "",
+      instagram: "",
+      twitter: "",
+      tiktok: "",
+      followers: [],
+      following: [],
+      tags: [],
+      menuImg: "",
+      bookingLink: "",
+      geolocation: "",
+      userId: userArr[2]._id,
     },
   ];
 
@@ -129,6 +146,7 @@ export const action = async ({ request }) => {
       rating: 3,
       likes: 0,
       comments: ["comment 1", "comment 2", "comment 3", "comment 4"],
+      restaurantId: profileArr[3],
       profileId: profileArr[0]._id,
     },
     {
@@ -142,6 +160,7 @@ export const action = async ({ request }) => {
       rating: 4,
       likes: 0,
       comments: ["comment 1", "comment 2", "comment 3", "comment 4"],
+      restaurantId: profileArr[3],
       profileId: profileArr[1]._id,
     },
     {
@@ -155,6 +174,7 @@ export const action = async ({ request }) => {
       rating: 2,
       likes: 0,
       comments: ["comment 1", "comment 2", "comment 3", "comment 4"],
+      restaurantId: profileArr[3],
       profileId: profileArr[2]._id,
     },
     {
@@ -168,6 +188,7 @@ export const action = async ({ request }) => {
       rating: 2,
       likes: 0,
       comments: ["comment 1", "comment 2", "comment 3", "comment 4"],
+      restaurantId: profileArr[3],
       profileId: profileArr[2]._id,
     },
   ];
@@ -191,6 +212,9 @@ export const action = async ({ request }) => {
     return uid;
   }
   if (_action === "repopulate") {
+    await db.models.User.deleteMany({});
+    await db.models.Profile.deleteMany({});
+    await db.models.Post.deleteMany({});
     await db.models.User.insertMany(userArr);
     await db.models.Profile.insertMany(profileArr);
     await db.models.Post.insertMany(postArr);
@@ -216,7 +240,7 @@ export default function Admin() {
         users: {userCount}, profiles: {profileCount}, posts: {postCount}{" "}
       </p>
       <div className="adminUserContainer">
-        {userxProfile.map((u) => {
+        {userxProfile?.map((u) => {
           return (
             <div key={u._id}>
               <p>{u.username}</p>
