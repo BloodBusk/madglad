@@ -10,6 +10,15 @@ import { requireUserSession } from "~/session.server.js";
 import connectDb from "~/db/connectDb.server.js";
 import { findProfileByUser, findAllRestaurants } from "~/db/dbF";
 
+import style from "~/styles/createPost.css";
+
+export const links = () => [
+  {
+    rel: "stylesheet",
+    href: style,
+  },
+];
+
 export async function loader({ request }) {
   const session = await requireUserSession(request);
   const userId = session.get("userId");
@@ -84,7 +93,7 @@ export async function action({ request }) {
       return redirect("/");
     } catch (err) {
       return json({ errorMessage: "error happened" });
-    }                     
+    }
   }
 }
 
@@ -94,7 +103,7 @@ export default function CreatePost() {
   const [input, setInput] = useState([]);
   const [inputText, setInputText] = useState("");
   const actionData = useActionData();
-       //search handler for restaurant
+  //search handler for restaurant
   let inputHandler = (e) => {
     let lowerCase = e.target.value.toLowerCase();
     setInputText(lowerCase);
@@ -136,7 +145,16 @@ export default function CreatePost() {
 
         <input type="file" name="upload" />
 
-        <input type="text" placeholder="add tags..." onChange={saveInput} />
+        <input type="text" placeholder="add tags..." list="tagList" onChange={saveInput} />
+        <datalist id="tagList">
+          <option value="3 Course Meal" />
+          <option value="Brunch" />
+          <option value="Breakfast" />
+          <option value="Lunch" />
+          <option value="Dinner" />
+          <option value="Italian" />
+          <option value="Danish" />
+        </datalist>
         <button type="button" onClick={addToArray}>
           Add Tag
         </button>

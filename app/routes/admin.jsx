@@ -37,7 +37,7 @@ export const loader = async ({ request }) => {
     profileCount,
     postCount,
     userxProfile,
-    profilexPost
+    profilexPost,
   };
 };
 
@@ -114,7 +114,8 @@ export const action = async ({ request }) => {
       bookingLink: "",
       geolocation: "",
       userId: userArr[2]._id,
-    },{
+    },
+    {
       _id: new mongoose.Types.ObjectId(),
       username: "Halleluja Food",
       isRestaurant: true,
@@ -141,11 +142,17 @@ export const action = async ({ request }) => {
       postImg: "/uploads/testImg.jpg",
       tags: ["3 course meal", "24/7 open", "brunch"],
       restaurantName: "Halleluja Food",
-      review: "this restaurant comes with the essence of christ, and i love it.",
+      review:
+        "this restaurant comes with the essence of christ, and i love it.",
       geolocation: "",
       rating: 3,
       likes: [],
-      comments: ["comment 1", "comment 2", "comment 3", "comment 4"],
+      comments: [
+        { username: profileArr[2].username, comment: "comment 1" },
+        { username: profileArr[1].username, comment: "comment 2" },
+        { username: profileArr[0].username, comment: "comment 3" },
+        { username: profileArr[3].username, comment: "comment 4" },
+      ],
       restaurantId: profileArr[3],
       profileId: profileArr[0]._id,
     },
@@ -155,11 +162,17 @@ export const action = async ({ request }) => {
       postImg: "/uploads/testImg.jpg",
       tags: ["3 course meal", "24/7 open", "brunch"],
       restaurantName: "Halleluja Food",
-      review: "this restaurant comes with the essence of christ, and i love it.",
+      review:
+        "this restaurant comes with the essence of christ, and i love it.",
       geolocation: "",
       rating: 4,
       likes: [],
-      comments: ["comment 1", "comment 2", "comment 3", "comment 4"],
+      comments: [
+        { username: profileArr[2].username, comment: "comment 1" },
+        { username: profileArr[1].username, comment: "comment 2" },
+        { username: profileArr[0].username, comment: "comment 3" },
+        { username: profileArr[3].username, comment: "comment 4" },
+      ],
       restaurantId: profileArr[3],
       profileId: profileArr[1]._id,
     },
@@ -169,11 +182,17 @@ export const action = async ({ request }) => {
       postImg: "/uploads/testImg.jpg",
       tags: ["3 course meal", "24/7 open", "brunch"],
       restaurantName: "Halleluja Food",
-      review: "this restaurant comes with the essence of christ, and i love it.",
+      review:
+        "this restaurant comes with the essence of christ, and i love it.",
       geolocation: "",
       rating: 2,
       likes: [],
-      comments: ["comment 1", "comment 2", "comment 3", "comment 4"],
+      comments: [
+        { username: profileArr[2].username, comment: "comment 1" },
+        { username: profileArr[1].username, comment: "comment 2" },
+        { username: profileArr[0].username, comment: "comment 3" },
+        { username: profileArr[3].username, comment: "comment 4" },
+      ],
       restaurantId: profileArr[3],
       profileId: profileArr[2]._id,
     },
@@ -183,11 +202,17 @@ export const action = async ({ request }) => {
       postImg: "/uploads/testImg.jpg",
       tags: ["3 course meal", "24/7 open", "brunch"],
       restaurantName: "Halleluja Food",
-      review: "this restaurant comes with the essence of christ, and i love it.",
+      review:
+        "this restaurant comes with the essence of christ, and i love it.",
       geolocation: "",
       rating: 2,
       likes: [],
-      comments: ["comment 1", "comment 2", "comment 3", "comment 4"],
+      comments: [
+        { username: profileArr[2].username, comment: "comment 1" },
+        { username: profileArr[1].username, comment: "comment 2" },
+        { username: profileArr[0].username, comment: "comment 3" },
+        { username: profileArr[3].username, comment: "comment 4" },
+      ],
       restaurantId: profileArr[3],
       profileId: profileArr[2]._id,
     },
@@ -231,7 +256,7 @@ export default function Admin() {
     profileCount,
     postCount,
     userxProfile,
-    profilexPost
+    profilexPost,
   } = useLoaderData();
   return (
     <div>

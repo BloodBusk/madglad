@@ -19,6 +19,16 @@ import SinglePost from "../components/singlePost";
 import Header from "~/routes/components/header.jsx";
 import FooterNav from "~/routes/components/footerNav.jsx";
 
+//style
+import style from "~/styles/userProfile.css";
+
+export const links = () => [
+  {
+    rel: "stylesheet",
+    href: style,
+  },
+];
+
 export async function loader({ request }) {
   const session = await requireUserSession(request);
   const userId = session.get("userId");
@@ -57,6 +67,25 @@ export async function action({ request }) {
       });
     }
   }
+  if (_action === "like") {
+    //increment likes for post
+    const postId = formData.get("hiddenPostId");
+    try {
+      await db.models.Post.updateOne(
+        {
+          _id: postId,
+        },
+        {
+          $addToSet: {
+            likes: userId,
+          },
+        }
+      );
+      return null;
+    } catch (err) {
+      return json(err.errors, { status: 400 });
+    }
+  }
 }
 
 export default function UserProfileId() {
@@ -81,7 +110,7 @@ export default function UserProfileId() {
     <>
       <Header profile={profile} />
 
-      <div>
+      <div className="userProfileContainer">
         User Id {profile.userId} {profile.username}{" "}
         <div>
           <Form method="post">

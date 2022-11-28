@@ -24,6 +24,7 @@ export const action = async ({ request }) => {
   const db = await connectDb();
   //form variables
   const form = await request.formData();
+  const username = form.get("username");
   const email = form.get("email");
   const password = form.get("password");
   const repeatPwd = form.get("repeatPwd");
@@ -53,7 +54,7 @@ export const action = async ({ request }) => {
 
     // creates user profile
     await db.models.Profile.create({
-      username: "",
+      username: username,
       isRestaurant: isRestaurant,
       isVerified: false,
       profileImg: "",
@@ -94,6 +95,8 @@ export default function Signup() {
           <Form method="post">
             <h1>Signup</h1>
             <h2>{userType}</h2>
+            <label>{userType} Name</label>
+            <input type="username" name="username" />
             <label>Email</label>
             <input type="email" name="email" />
             <p>{actionData?.formErrors?.email}</p>

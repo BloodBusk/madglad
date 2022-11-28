@@ -38,6 +38,7 @@ export async function action({ request, params }) {
   const loggedInProfile = await findProfileByUser(db, userId);
   console.log(userId);
 
+  //adds id of follower to logged in user and adds logged in user id to the followed. //addToSet is mongodb push method but unique
   try {
     await db.models.Profile.updateOne(
       { userId: userId },
