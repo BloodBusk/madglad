@@ -35,7 +35,7 @@ const postSchema = new Schema({
   review: String,
   geolocation: String,
   rating: String,
-  likes: Number,
+  likes: Array,
   comments: Array,
   restaurantId: {type:Schema.Types.ObjectId, ref:"Profile"},
   profileId: {type:Schema.Types.ObjectId, ref:"Profile"}

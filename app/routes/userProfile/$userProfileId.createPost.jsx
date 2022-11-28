@@ -75,7 +75,7 @@ export async function action({ request }) {
         review: review,
         geolocation: "",
         rating: rating,
-        likes: 0,
+        likes: [],
         comments: [],
         restaurantId: restaurantProfile?._id,
         profileId: profile?._id,

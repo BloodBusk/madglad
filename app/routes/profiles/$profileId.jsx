@@ -42,7 +42,7 @@ export async function action({ request, params }) {
     await db.models.Profile.updateOne(
       { userId: userId },
       {
-        $push: {
+        $addToSet: {
           following: params.profileId,
         },
       }
@@ -50,7 +50,7 @@ export async function action({ request, params }) {
     await db.models.Profile.updateOne(
       { _id: params.profileId },
       {
-        $push: {
+        $addToSet: {
           followers: userId,
         },
       }

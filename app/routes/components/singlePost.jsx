@@ -51,7 +51,7 @@ export default function SinglePost({ post }) {
             <input type="hidden" defaultValue={post._id} name="hiddenPostId" />
           </Form>
         </div>
-        <p>{post.likes}</p>
+        <p>{post.likes.length}</p>
         <Link to={`/posts/${post._id}`}>
           <img src={Comment} alt="comment icon" className="postIcons" />
         </Link>

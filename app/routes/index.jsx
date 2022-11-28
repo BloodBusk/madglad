@@ -33,6 +33,7 @@ export const loader = async ({ request }) => {
 export const action = async ({ request }) => {
   const db = await connectDb();
   const form = await request.formData();
+  const userId = await getLoggedUser(request);
 
   //increment likes for post
   const postId = form.get("hiddenPostId");
@@ -42,7 +43,9 @@ export const action = async ({ request }) => {
         _id: postId,
       },
       {
-        $inc: { likes: 1 },
+        $addToSet: {
+          likes: userId,
+        },
       }
     );
     return null;
