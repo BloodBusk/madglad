@@ -2,28 +2,33 @@ import React, { useState } from "react";
 import { redirect, json, createCookie } from "@remix-run/node";
 import { useLoaderData, useActionData, Form, Link } from "@remix-run/react";
 import connectDb from "~/db/connectDb.server.js";
-import { findAllPosts } from "~/db/dbF";
+import { getLoggedUser, requireUserSession } from "~/session.server";
+import { findAllPosts, findUserById, findProfileByUser } from "~/db/dbF";
 import style from "~/styles/search.css";
 
+//components
+import Header from "~/routes/components/header.jsx";
+import FooterNav from "~/routes/components/footerNav.jsx";
+
 export const links = () => [
-    {
-      rel: "stylesheet",
-      href: style,
-    },
-  ];
+  {
+    rel: "stylesheet",
+    href: style,
+  },
+];
 
-export const loader = async () => {
+export const loader = async ({request}) => {
+  await requireUserSession(request);
+  const userId = await getLoggedUser(request);
   const db = await connectDb();
+  const user = await findUserById(db, userId);
+  const profile = await findProfileByUser(db, user);
   const posts = await findAllPosts(db);
-  return posts;
-};
-
-export const action = async () => {
-  return null;
+  return {posts, profile, user};
 };
 
 export default function Search() {
-  const posts = useLoaderData();
+  const {posts, profile, user} = useLoaderData();
   const [inputText, setInputText] = useState("");
 
   let inputHandler = (e) => {
@@ -41,6 +46,8 @@ export default function Search() {
 
   return (
     <>
+      <Header profile={profile} />
+
       <div className="searchField">
         <input
           label="Search"
@@ -51,12 +58,13 @@ export default function Search() {
       <div className="searchImgContainer">
         {filteredData.map((p) => {
           return (
-            <Link key={p._id} to={`/posts/${p._id}`} className="searchLinks" >
+            <Link key={p._id} to={`/posts/${p._id}`} className="searchLinks">
               <img src={p.postImg} alt="post" className="searchImgs" />
             </Link>
           );
         })}
       </div>
+      <FooterNav user={user._id} />
     </>
   );
 }

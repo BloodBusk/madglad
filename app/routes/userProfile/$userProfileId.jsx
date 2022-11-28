@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useLoaderData, Form } from "@remix-run/react";
 import { json, redirect } from "@remix-run/node";
 import connectDb from "~/db/connectDb.server.js";
-import { requireUserSession} from "~/session.server.js";
+import { requireUserSession } from "~/session.server.js";
 import {
   findUserById,
   findProfileByUser,
@@ -14,7 +14,10 @@ import instagram from "~/imgs/instagram.svg";
 import twitter from "~/imgs/twitter.svg";
 import tiktok from "~/imgs/tiktok.svg";
 
+//components
 import SinglePost from "../components/singlePost";
+import Header from "~/routes/components/header.jsx";
+import FooterNav from "~/routes/components/footerNav.jsx";
 
 export async function loader({ request }) {
   const session = await requireUserSession(request);
@@ -75,113 +78,122 @@ export default function UserProfileId() {
   };
 
   return (
-    <div>
-      User Id {profile.userId} {profile.username}{" "}
+    <>
+      <Header profile={profile} />
+
       <div>
-        <Form method="post">
-          <button name="_action" value="createPost" type="submit">
-            Create Post
-          </button>
-        </Form>
-        <Form method="post">
-          <button name="_action" value="changeProfileImg" type="submit">
-            <img
-              src={profile.profileImg}
-              alt="profile img"
-              className="profileImgHeader"
-            />
-          </button>
-        </Form>
-        <p>
-          {profile.username} {profile.isVerified ? "true" : "false"}
-        </p>
+        User Id {profile.userId} {profile.username}{" "}
         <div>
+          <Form method="post">
+            <button name="_action" value="createPost" type="submit">
+              Create Post
+            </button>
+          </Form>
+          <Form method="post">
+            <button name="_action" value="changeProfileImg" type="submit">
+              <img
+                src={profile.profileImg}
+                alt="profile img"
+                className="profileImgHeader"
+              />
+            </button>
+          </Form>
+          <p>
+            {profile.username} {profile.isVerified ? "true" : "false"}
+          </p>
           <div>
-            <p>Posts</p>
-            <p>{postsCount}</p>
-          </div>
-          <div>
-            <p>Followers</p>
-            <p>{profile.followers.length}</p>
-          </div>
-          <div>
-            <p>Following</p>
-            <p>{profile.following.length}</p>
-          </div>
-        </div>
-        <div>
-          {profile.facebook !== "" ? (
-            <a href={profile.facebook} target="_blank" rel="noreferrer">
-              <img src={facebook} alt="facebook" className="socialIcons" />
-            </a>
-          ) : (
-            ""
-          )}
-          {profile.instagram !== "" ? (
-            <a href={profile.instagram} target="_blank" rel="noreferrer">
-              <img src={instagram} alt="instagram" className="socialIcons" />
-            </a>
-          ) : (
-            ""
-          )}
-          {profile.twitter !== "" ? (
-            <a href={profile.twitter} target="_blank" rel="noreferrer">
-              <img src={twitter} alt="twitter" className="socialIcons" />
-            </a>
-          ) : (
-            ""
-          )}
-          {profile.tiktok !== "" ? (
-            <a href={profile.tiktok} target="_blank" rel="noreferrer">
-              <img src={tiktok} alt="tiktok" className="socialIcons" />
-            </a>
-          ) : (
-            ""
-          )}
-        </div>
-      </div>
-      <div>
-        {posts.map((p) => {
-          return (
-            <div key={p._id}>
-              <button type="button" onClick={showPostSettings}>
-                | | |
-              </button>
-              {showSettings ? (
-                <>
-                  <button type="button">Edit</button>
-                  <button type="button" onClick={showDeleteOptions}>
-                    Delete
-                  </button>
-                  {showDelete ? (
-                    <>
-                      <Form method="post">
-                        <label>Are you Sure you want to Delete?</label>
-                        <input
-                          type="hidden"
-                          name="hiddenPostId"
-                          defaultValue={p._id}
-                        />
-                        <button type="submit" name="_action" value="deletePost">
-                          Yes
-                        </button>
-                      </Form>
-                      <button type="button" onClick={handleDeleteNo}>
-                        No
-                      </button>
-                    </>
-                  ) : (
-                    ""
-                  )}
-                </>
-              ) : (
-                ""
-              )}
-              <SinglePost post={p} />
+            <div>
+              <p>Posts</p>
+              <p>{postsCount}</p>
             </div>
-          );
-        })}
+            <div>
+              <p>Followers</p>
+              <p>{profile.followers.length}</p>
+            </div>
+            <div>
+              <p>Following</p>
+              <p>{profile.following.length}</p>
+            </div>
+          </div>
+          <div>
+            {profile.facebook !== "" ? (
+              <a href={profile.facebook} target="_blank" rel="noreferrer">
+                <img src={facebook} alt="facebook" className="socialIcons" />
+              </a>
+            ) : (
+              ""
+            )}
+            {profile.instagram !== "" ? (
+              <a href={profile.instagram} target="_blank" rel="noreferrer">
+                <img src={instagram} alt="instagram" className="socialIcons" />
+              </a>
+            ) : (
+              ""
+            )}
+            {profile.twitter !== "" ? (
+              <a href={profile.twitter} target="_blank" rel="noreferrer">
+                <img src={twitter} alt="twitter" className="socialIcons" />
+              </a>
+            ) : (
+              ""
+            )}
+            {profile.tiktok !== "" ? (
+              <a href={profile.tiktok} target="_blank" rel="noreferrer">
+                <img src={tiktok} alt="tiktok" className="socialIcons" />
+              </a>
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
+        <div>
+          {posts.map((p) => {
+            return (
+              <div key={p._id}>
+                <button type="button" onClick={showPostSettings}>
+                  | | |
+                </button>
+                {showSettings ? (
+                  <>
+                    <button type="button">Edit</button>
+                    <button type="button" onClick={showDeleteOptions}>
+                      Delete
+                    </button>
+                    {showDelete ? (
+                      <>
+                        <Form method="post">
+                          <label>Are you Sure you want to Delete?</label>
+                          <input
+                            type="hidden"
+                            name="hiddenPostId"
+                            defaultValue={p._id}
+                          />
+                          <button
+                            type="submit"
+                            name="_action"
+                            value="deletePost"
+                          >
+                            Yes
+                          </button>
+                        </Form>
+                        <button type="button" onClick={handleDeleteNo}>
+                          No
+                        </button>
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </>
+                ) : (
+                  ""
+                )}
+                <SinglePost post={p} />
+              </div>
+            );
+          })}
+        </div>
       </div>
-    </div>
+      <FooterNav user={user._id} />
+    </>
   );
 }

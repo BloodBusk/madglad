@@ -4,6 +4,10 @@ import React, { useState } from "react";
 import connectDb from "~/db/connectDb.server";
 import { findPostById } from "~/db/dbF";
 
+//components
+import Header from "~/routes/components/header.jsx";
+import FooterNav from "~/routes/components/footerNav.jsx";
+
 export async function loader({ params }) {
   const db = await connectDb();
   const post = await findPostById(db, params.postId);

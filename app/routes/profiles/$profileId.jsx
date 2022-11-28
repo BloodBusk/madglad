@@ -5,23 +5,31 @@ import {
   findProfileById,
   findPostsCountByProfile,
   findProfileByUser,
+  findUserById,
 } from "~/db/dbF";
-import { getLoggedUser } from "~/session.server";
+import { getLoggedUser, requireUserSession } from "~/session.server";
 import facebook from "~/imgs/facebook-f.svg";
 import instagram from "~/imgs/instagram.svg";
 import twitter from "~/imgs/twitter.svg";
 import tiktok from "~/imgs/tiktok.svg";
 
+//components
 import SinglePost from "../components/singlePost";
+import Header from "~/routes/components/header.jsx";
+import FooterNav from "~/routes/components/footerNav.jsx";
 
-export async function loader({ params }) {
+export async function loader({ request, params }) {
+  await requireUserSession(request);
   const db = await connectDb();
+  const userId = await getLoggedUser(request);
+  const loggedProfile = await findProfileByUser(db, userId);
+  const user = await findUserById(db, userId);
   const profile = await findProfileById(db, params.profileId);
   const postsCount = await findPostsCountByProfile(db, profile);
-  const posts = await db.models.Post.find({ profileId: profile._id }).populate(
-    "profileId"
-  ).populate("restaurantId");
-  return { profile, postsCount, posts };
+  const posts = await db.models.Post.find({ profileId: profile._id })
+    .populate("profileId")
+    .populate("restaurantId");
+  return { profile, postsCount, posts, user, loggedProfile };
 }
 
 export async function action({ request, params }) {
@@ -30,22 +38,24 @@ export async function action({ request, params }) {
   const loggedInProfile = await findProfileByUser(db, userId);
   console.log(userId);
 
-  try{
+  try {
     await db.models.Profile.updateOne(
-      {userId: userId},
-      {$push: {
-        following: params.profileId
-      }}
-    )
-    await db.models.Profile.updateOne(
-      {_id: params.profileId},
+      { userId: userId },
       {
         $push: {
-          followers: userId
-        }
+          following: params.profileId,
+        },
       }
-    )
-  }catch(err){
+    );
+    await db.models.Profile.updateOne(
+      { _id: params.profileId },
+      {
+        $push: {
+          followers: userId,
+        },
+      }
+    );
+  } catch (err) {
     console.log(err);
   }
 
@@ -53,9 +63,10 @@ export async function action({ request, params }) {
 }
 
 export default function ProfileId() {
-  const { profile, postsCount, posts } = useLoaderData();
+  const { profile, postsCount, posts, user, loggedProfile } = useLoaderData();
   return (
     <>
+      <Header profile={loggedProfile} />
       <div>
         <img
           src={profile.profileImg}
@@ -122,6 +133,7 @@ export default function ProfileId() {
           return <SinglePost post={p} key={p._id} />;
         })}
       </div>
+      <FooterNav user={user._id} />
     </>
   );
 }

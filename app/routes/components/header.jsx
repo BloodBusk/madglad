@@ -1,8 +1,5 @@
-import { Link, Form, useCatch, useLoaderData } from "@remix-run/react";
-import connectDb from "~/db/connectDb.server.js";
-import { getSession } from "~/session.server.js";
-import { redirect, json } from "@remix-run/node";
-import Logo from "~/imgs/Logo.png";
+import { Link } from "@remix-run/react";
+
 
 export default function Header({ profile }) {
   return (

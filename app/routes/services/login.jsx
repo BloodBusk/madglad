@@ -1,7 +1,7 @@
 import { setSession, setCookieSecret } from "~/session.server.js";
 import * as bcrypt from "bcryptjs";
-import { redirect, json, createCookie } from "@remix-run/node";
-import { useLoaderData, useActionData, Form, Link } from "@remix-run/react";
+import {  json } from "@remix-run/node";
+import { useActionData, Form, Link } from "@remix-run/react";
 import connectDb from "~/db/connectDb.server.js";
 import {
   validateEmptyField

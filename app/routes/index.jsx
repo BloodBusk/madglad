@@ -6,6 +6,10 @@ import connectDb from "~/db/connectDb.server";
 import { findUserById, findProfileByUser, findAllPosts } from "~/db/dbF";
 import style from "~/styles/home.css";
 
+//components
+import Header from "~/routes/components/header.jsx";
+import FooterNav from "~/routes/components/footerNav.jsx";
+
 export const links = () => [
   {
     rel: "stylesheet",
@@ -51,14 +55,18 @@ export default function Index() {
   const { profile, user, posts, postXProfile } = useLoaderData();
 
   return (
-    <div className="home">
-      {postXProfile?.map((post) => {
-        return (
-          <div key={post._id}>
-            <SinglePost post={post} />
-          </div>
-        );
-      })}
-    </div>
+    <>
+    {<Header profile={profile} />}
+      <div className="home">
+        {postXProfile?.map((post) => {
+          return (
+            <div key={post._id}>
+              <SinglePost post={post} />
+            </div>
+          );
+        })}
+      </div>
+      <FooterNav user={user._id} />
+    </>
   );
 }
