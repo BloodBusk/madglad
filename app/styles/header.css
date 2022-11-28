@@ -31,5 +31,19 @@
   height: 50px;
   border-radius: 50%;
   border-style: inset;
-  background-color: black;
+}
+.settingsContainer{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.settingsButton{
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.settingsImg{
+  width: 30px;
+  
 }

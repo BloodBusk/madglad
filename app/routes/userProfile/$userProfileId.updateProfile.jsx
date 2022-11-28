@@ -9,6 +9,26 @@ import { getLoggedUser, requireUserSession } from "~/session.server";
 import connectDb from "~/db/connectDb.server";
 import { findUserById, findProfileByUser } from "~/db/dbF";
 
+//img imports
+import facebook from "~/imgs/facebook-f.svg";
+import instagram from "~/imgs/instagram.svg";
+import twitter from "~/imgs/twitter.svg";
+import tiktok from "~/imgs/tiktok.svg";
+
+//components
+import Header from "~/routes/components/header.jsx";
+import FooterNav from "~/routes/components/footerNav.jsx";
+
+//style
+import style from "~/styles/updateProfile.css";
+
+export const links = () => [
+  {
+    rel: "stylesheet",
+    href: style,
+  },
+];
+
 export async function loader({ request }) {
   await requireUserSession(request);
   const userId = await getLoggedUser(request);
@@ -22,6 +42,8 @@ export async function action({ request }) {
   const db = await connectDb();
   const session = await requireUserSession(request);
   const userId = session.get("userId");
+
+  //img update
   const fileUploadHandler = unstable_createFileUploadHandler({
     avoidFileConflicts: true,
     maxPartSize: 5_000_000,
@@ -32,7 +54,6 @@ export async function action({ request }) {
     request,
     fileUploadHandler
   );
-
   const pathName = formData.get("upload").filepath;
   const pathSearch = pathName.search("uploads");
   const pathString = pathName.slice(pathSearch - 1);
@@ -53,13 +74,40 @@ export async function action({ request }) {
   }
 }
 
-export default function UploadImg() {
+export default function UpdateProfile() {
+  const { profile, user } = useLoaderData();
   return (
     <>
-      <Form method="post" encType="multipart/form-data">
+      <Header profile={profile} />
+      <Form method="post" encType="multipart/form-data" className="updateProfileForm">
         <input type="file" name="upload" />
-        <button type="submit">upload</button>
+        <img src={facebook} alt="facebook img" className="updateProfileIcon" />
+        <input
+          type="text"
+          name="facebook"
+          placeholder="place your facebook link here..."
+        />
+        <img src={instagram} alt="facebook img" className="updateProfileIcon" />
+        <input
+          type="text"
+          name="instagram"
+          placeholder="place your instagram link here..."
+        />
+        <img src={twitter} alt="facebook img" className="updateProfileIcon" />
+        <input
+          type="text"
+          name="twitter"
+          placeholder="place your twitter link here..."
+        />
+        <img src={tiktok} alt="facebook img" className="updateProfileIcon" />
+        <input
+          type="text"
+          name="tiktok"
+          placeholder="place your tiktok link here..."
+        />
+        <button type="submit">Update</button>
       </Form>
+      <FooterNav user={user._id} />
     </>
   );
 }

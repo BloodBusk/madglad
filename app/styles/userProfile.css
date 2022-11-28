@@ -1,3 +1,23 @@
 .userProfileContainer{
-    margin: 10vh auto;
+    margin: 10vh 2vw;
+}
+
+.verifiedIcon{
+    width: 10px;
+}
+
+.userProfileId_container{
+
+}
+
+.userProfileId_1{
+    display: flex;
+    align-items: center;
+}
+
+.profileServiceLinks{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

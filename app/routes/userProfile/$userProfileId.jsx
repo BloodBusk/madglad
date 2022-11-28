@@ -1,5 +1,11 @@
-import React, { useState } from "react";
-import { useLoaderData, Form } from "@remix-run/react";
+import React, { useRef, useState } from "react";
+import {
+  useLoaderData,
+  Form,
+  useActionData,
+  useSubmit,
+  Link,
+} from "@remix-run/react";
 import { json, redirect } from "@remix-run/node";
 import connectDb from "~/db/connectDb.server.js";
 import { requireUserSession } from "~/session.server.js";
@@ -9,10 +15,14 @@ import {
   findPostsCountByProfile,
 } from "~/db/dbF.js";
 
+//imgs
 import facebook from "~/imgs/facebook-f.svg";
 import instagram from "~/imgs/instagram.svg";
 import twitter from "~/imgs/twitter.svg";
 import tiktok from "~/imgs/tiktok.svg";
+import defaultProfile from "~/imgs/user.png";
+import settings from "~/imgs/settings.png";
+import verified from "~/imgs/verified.png";
 
 //components
 import SinglePost from "../components/singlePost";
@@ -49,10 +59,14 @@ export async function action({ request }) {
   let formData = await request.formData();
   let { _action, ...values } = Object.fromEntries(formData);
 
-  let hiddenPostId = formData.get("hiddenPostId");
+  //form values
+  const hiddenPostId = formData.get("hiddenPostId");
+  const title = formData.get("title");
+  const restaurantName = formData.get("restaurantName");
+  const review = formData.get("review");
 
   if (_action === "createPost") {
-    return redirect(`/userProfile/${userId}/createPost`);
+    return redirect();
   }
   if (_action === "changeProfileImg") {
     return redirect(`/services/uploadImg`);
@@ -67,13 +81,31 @@ export async function action({ request }) {
       });
     }
   }
-  if (_action === "like") {
-    //increment likes for post
-    const postId = formData.get("hiddenPostId");
+  if (_action === "editPost") {
     try {
       await db.models.Post.updateOne(
         {
-          _id: postId,
+          _id: hiddenPostId,
+        },
+        {
+          $set: {
+            title: title,
+            restaurantName: restaurantName,
+            review: review,
+          },
+        }
+      );
+
+      return redirect(`/userProfile/${userId}`);
+    } catch (err) {
+      return json(err.errors, { status: 400 });
+    }
+  }
+  if (_action === "like") {
+    try {
+      await db.models.Post.updateOne(
+        {
+          _id: hiddenPostId,
         },
         {
           $addToSet: {
@@ -92,6 +124,7 @@ export default function UserProfileId() {
   const { profile, user, posts, postsCount } = useLoaderData();
   const [showSettings, setShowSettings] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
 
   const showPostSettings = () => {
     setShowSettings((showSettings) => !showSettings);
@@ -106,30 +139,39 @@ export default function UserProfileId() {
     setShowSettings(false);
   };
 
+  const showEditOptions = () => {
+    setShowEdit((showEdit) => !showEdit);
+  };
+
   return (
     <>
       <Header profile={profile} />
-
       <div className="userProfileContainer">
-        User Id {profile.userId} {profile.username}{" "}
-        <div>
-          <Form method="post">
-            <button name="_action" value="createPost" type="submit">
-              Create Post
-            </button>
-          </Form>
-          <Form method="post">
-            <button name="_action" value="changeProfileImg" type="submit">
-              <img
-                src={profile.profileImg}
-                alt="profile img"
-                className="profileImgHeader"
-              />
-            </button>
-          </Form>
-          <p>
-            {profile.username} {profile.isVerified ? "true" : "false"}
-          </p>
+        <div className="userProfileId_container">
+          <div className="profileServiceLinks">
+            <Link to={`/userProfile/${user._id}/updateProfile`}>
+              Update Profile
+            </Link>
+            <Link to="/services/logout">Logout</Link>
+          </div>
+          <div className="userProfileId_1">
+            {/* profile picture */}
+            <img
+              src={profile.profileImg ? profile.profileImg : defaultProfile}
+              alt="profile img"
+              className="profileImgHeader"
+            />
+            {/* checks if the user is verified */}
+            <h3>
+              {profile.username}{" "}
+              {profile.isVerified ? (
+                <img src={verified} alt="verified" className="verifiedIcon" />
+              ) : (
+                ""
+              )}
+            </h3>
+          </div>
+          {/* followers / followings / posts */}
           <div>
             <div>
               <p>Posts</p>
@@ -144,6 +186,7 @@ export default function UserProfileId() {
               <p>{profile.following.length}</p>
             </div>
           </div>
+          {/* social media */}
           <div>
             {profile.facebook !== "" ? (
               <a href={profile.facebook} target="_blank" rel="noreferrer">
@@ -175,28 +218,62 @@ export default function UserProfileId() {
             )}
           </div>
         </div>
+        {/* posts */}
         <div>
           {posts.map((p) => {
             return (
-              <div key={p._id}>
-                <button type="button" onClick={showPostSettings}>
-                  | | |
+              <div key={p._id} className="settingsContainer">
+                <button
+                  type="button"
+                  onClick={showPostSettings}
+                  className="settingsButton"
+                >
+                  <img src={settings} alt="settings" className="settingsImg" />
                 </button>
                 {showSettings ? (
                   <>
-                    <button type="button">Edit</button>
+                    <button type="button" onClick={showEditOptions}>
+                      Edit
+                    </button>
                     <button type="button" onClick={showDeleteOptions}>
                       Delete
                     </button>
-                    {showDelete ? (
+
+                    {showEdit ? (
                       <>
-                        <Form method="post">
-                          <label>Are you Sure you want to Delete?</label>
+                        <Form method="POST" reloadDocument>
+                          <input
+                            type="text"
+                            defaultValue={p.title}
+                            name="title"
+                          />
+                          <input
+                            type="text"
+                            defaultValue={p.restaurantName}
+                            name="restaurantName"
+                          />
+                          <input
+                            type="text"
+                            defaultValue={p.review}
+                            name="review"
+                          />
                           <input
                             type="hidden"
                             name="hiddenPostId"
                             defaultValue={p._id}
                           />
+                          <button type="submit" name="_action" value="editPost">
+                            Done
+                          </button>
+                        </Form>
+                      </>
+                    ) : (
+                      ""
+                    )}
+                    {showDelete ? (
+                      <>
+                        <Form method="DELETE">
+                          <label>Are you Sure you want to Delete?</label>
                           <button
                             type="submit"
                             name="_action"
@@ -204,6 +281,11 @@ export default function UserProfileId() {
                           >
                             Yes
                           </button>
+                          <input
+                            type="hidden"
+                            name="hiddenPostId"
+                            defaultValue={p._id}
+                          />
                         </Form>
                         <button type="button" onClick={handleDeleteNo}>
                           No
