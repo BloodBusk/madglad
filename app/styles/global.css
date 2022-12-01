@@ -1,17 +1,25 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+:root {
+  --color-1: linear-gradient(to right, #ff512f, #f09819);
+  --color-2: linear-gradient(#1845ad, #23a2f6);
+  --font-size-1: 30px;
+  --font-size-2: 25px;
+  --font-size-3: 20px;
+  --font-size-4: 18px;
 }
 
-.profileImgHeader{
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.socialIcons{
-    width: 30px;
-    height: 30px;
+.profileImgHeader {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }
 
+.socialIcons {
+  width: 30px;
+  height: 30px;
+}

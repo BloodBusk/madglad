@@ -4,6 +4,8 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { getLoggedUser, requireUserSession } from "~/session.server";
 import connectDb from "~/db/connectDb.server";
 import { findUserById, findProfileByUser, findAllPosts } from "~/db/dbF";
+
+//css
 import style from "~/styles/home.css";
 
 //components

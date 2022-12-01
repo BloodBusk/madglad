@@ -9,12 +9,15 @@ import {
 } from "../services/validate.jsx";
 import { useState } from "react";
 
-// export const links = () => [
-//   {
-//     rel: "stylesheet",
-//     href: style,
-//   },
-// ];
+//css
+import style from "~/styles/login_signup.css";
+
+export const links = () => [
+  {
+    rel: "stylesheet",
+    href: style,
+  },
+];
 
 export const loader = async ({ request }) => {
   return setCookieSecret(request); //return session userId
@@ -90,9 +93,13 @@ export default function Signup() {
   };
   return (
     <>
-      <div>
+      <div className="logUserContainer">
+        <div className="circleBackground">
+          <div className="circle"></div>
+          <div className="circle"></div>
+        </div>
         {userType !== "" ? (
-          <Form method="post">
+          <Form method="post" className="logUserForm">
             <h1>Signup</h1>
             <h2>{userType}</h2>
             <label>{userType} Name</label>
@@ -109,8 +116,8 @@ export default function Signup() {
             <button type="submit" name="signup">
               Signup
             </button>
-            <h3>Already Have An Account?</h3>
-            <Link to="/services/login" >Login</Link>
+            <h4>Already Have An Account?</h4>
+            <Link to="/services/login">Login</Link>
             <p>{actionData?.userAlreadyExists}</p>
             <p>{actionData?.userNotFound}</p>
             {/* hidden variable to keep track of is restaurant or not, tracked in a usestate */}
@@ -121,15 +128,11 @@ export default function Signup() {
             ></input>
           </Form>
         ) : (
-          <div>
+          <div className="userTypeContainer">
             <button type="button" onClick={handleUserType} value="User">
               User
             </button>
-            <button
-              type="button"
-              onClick={handleUserType}
-              value="Restaurant"
-            >
+            <button type="button" onClick={handleUserType} value="Restaurant">
               Restaurant
             </button>
           </div>
