@@ -36,13 +36,18 @@ export async function action({ request, params }) {
   const db = await connectDb();
   const form = await request.formData();
   const comment = form.get("comment");
+  const userId = await getLoggedUser(request);
+  const loggedInUserProfile = await findProfileByUser(db, userId);
 
   try {
     await db.models.Post.updateOne(
       { _id: params.postId },
       {
         $push: {
-          comments: comment,
+          comments: {
+            username: loggedInUserProfile.username,
+            comment: comment,
+          },
         },
       }
     );
