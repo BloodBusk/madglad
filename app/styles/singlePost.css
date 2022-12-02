@@ -1,27 +1,38 @@
 .singlePostContainer{
     width: 95%;
     margin: 5vh auto;
+    color: white;
+}
+.singlePostContainer h3{
+    margin-bottom: 1vh;
 }
 
 .singlePostHeader{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 1vh;
 }
 
-.singlePostHeaderLink{
+.singlePostHeader a{
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: black;
+    color: white
 }
 
 .singlePostIconContainer{
     display: flex;
     align-items: center;
+    margin-bottom: 1vh;
 }
 .singlePostIconContainer p{
     margin-right: 5px;
+}
+
+.likeBtn{
+    border:none;
+    background: none;
 }
 
 .postImg{

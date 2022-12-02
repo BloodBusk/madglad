@@ -12,7 +12,6 @@ import FooterNav from "~/routes/components/footerNav.jsx";
 //style
 import style from "~/styles/postId.css";
 
-
 export const links = () => [
   {
     rel: "stylesheet",
@@ -20,7 +19,7 @@ export const links = () => [
   },
 ];
 
-export async function loader({request, params }) {
+export async function loader({ request, params }) {
   const db = await connectDb();
   const userId = await getLoggedUser(request);
   const loggedInUserProfile = await findProfileByUser(db, userId);
@@ -30,7 +29,7 @@ export async function loader({request, params }) {
   })
     .populate("profileId")
     .populate("restaurantId");
-  return {postxProfile, userId, loggedInUserProfile};
+  return { postxProfile, userId, loggedInUserProfile };
 }
 
 export async function action({ request, params }) {
@@ -57,7 +56,7 @@ export async function action({ request, params }) {
 }
 
 export default function PostId() {
-  const {postxProfile, userId, loggedInUserProfile} = useLoaderData();
+  const { postxProfile, userId, loggedInUserProfile } = useLoaderData();
   const actionData = useActionData();
   const [commentSize, setCommentSize] = useState(3);
 
@@ -71,67 +70,72 @@ export default function PostId() {
 
   return (
     <>
-    {<Header profile={loggedInUserProfile} />}
+      {<Header profile={loggedInUserProfile} />}
       <div className="postIdContainer">
-        <div>
+        <div className="postIdHeader">
           <img
             src={postxProfile.profileId?.profileImg}
             alt="profile img"
             className="profileImgHeader"
           />
-          <h4>{postxProfile.profileId?.username}</h4>
+          <h4 className="postIdUsername">{postxProfile.profileId?.username}</h4>
         </div>
-        <div>
+        <div className="postIdHeader2">
+          <h3>{postxProfile?.title}</h3>
+
           <Link
             to={
               postxProfile.restaurantId
                 ? `/profiles/${postxProfile.restaurantId._id}`
                 : ""
             }
+            className="postIdRestaurant"
           >
             {postxProfile?.restaurantName}{" "}
           </Link>
         </div>
         <div>
-          <h2>{postxProfile?.title}</h2>
+          <img
+            src={postxProfile.postImg}
+            alt="post pic"
+            className="postIdImg"
+          />
         </div>
-        <div>
-          <img src={postxProfile.postImg} alt="post pic" />
+
+        <div className="postIdTags">
+          {postxProfile.tags?.map((tags, i) => {
+            return <p key={i}>#{tags}</p>;
+          })}
         </div>
-        <div>
-          <div>
-            {postxProfile.tags?.map((tags, i) => {
-              return <p key={i}>{tags}</p>;
-            })}
-            <p>{postxProfile?.review}</p>
-          </div>
-          <p>{/* geolocation todo */}</p>
-        </div>
-        <div>
+        <p className="postIdReview">{postxProfile?.review}</p>
+        <div className="postIdBtns">
           {postxProfile.restaurantId ? (
             <Link to={postxProfile.restaurantId.bookingLink}>Book Her</Link>
           ) : (
             ""
           )}
+          <Link to="">{/* geolocation todo */}Geolocation</Link>
         </div>
+        <Form method="post" className="postIdCommentForm">
+          <input type="text" name="comment" placeholder="kommentar..." />
+          <button type="submit">Post</button>
+        </Form>
         <div>
           {postxProfile.comments?.slice(0, commentSize).map((com, i) => {
             return (
-              <p key={i}>
-                {com.username}
-                {com.comment}
-              </p>
+              <div key={i} className="postIdComments">
+                <h4>{com.username}</h4>
+                <p>{com.comment}</p>
+                <div className="divider"></div>
+              </div>
             );
           })}
+        </div>
+        <div className="postIdCommentMore">
           <p onClick={handleShowMore}>show more comments</p>
           <p onClick={handleShowLess}>collapse comments</p>
         </div>
-        <div>
-          <Form method="post">
-            <input type="text" name="comment" placeholder="kommentar..." />
-            <button type="submit">kommentar</button>
-          </Form>
-        </div>
+
         {actionData?.errormessage}
       </div>
       <FooterNav user={userId} />

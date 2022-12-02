@@ -1,5 +1,6 @@
 .userProfileContainer{
-    margin: 10vh 2vw;
+    padding: 10vh 0;
+    background-color: var(--background-1);
 }
 
 .verifiedIcon{
@@ -7,7 +8,8 @@
 }
 
 .userProfileId_container{
-
+    width: 95%;
+    margin: auto;
 }
 
 .userProfileId_1{

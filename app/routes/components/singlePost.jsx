@@ -45,6 +45,7 @@ export default function SinglePost({ post }) {
               name="_action"
               value="like"
               onClick={handleLiked}
+              className="likeBtn"
             >
               <img src={liked ? LikeSolid : LikeRegular} alt="like icon" className="postIcons" />
             </button>

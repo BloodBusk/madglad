@@ -8,8 +8,9 @@
     justify-content: space-evenly;
     align-items: center;
     height: 50px;
+    background: rgb(30, 30, 30);
 }
 
 .footer a{
-    
+    color: white;
 }

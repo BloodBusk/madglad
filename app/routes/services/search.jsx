@@ -17,18 +17,18 @@ export const links = () => [
   },
 ];
 
-export const loader = async ({request}) => {
+export const loader = async ({ request }) => {
   await requireUserSession(request);
   const userId = await getLoggedUser(request);
   const db = await connectDb();
   const user = await findUserById(db, userId);
   const profile = await findProfileByUser(db, user);
   const posts = await findAllPosts(db);
-  return {posts, profile, user};
+  return { posts, profile, user };
 };
 
 export default function Search() {
-  const {posts, profile, user} = useLoaderData();
+  const { posts, profile, user } = useLoaderData();
   const [inputText, setInputText] = useState("");
 
   let inputHandler = (e) => {
@@ -47,22 +47,23 @@ export default function Search() {
   return (
     <>
       <Header profile={profile} />
-
-      <div className="searchField">
-        <input
-          label="Search"
-          placeholder="Search posts..."
-          onChange={inputHandler}
-        />
-      </div>
-      <div className="searchImgContainer">
-        {filteredData.map((p) => {
-          return (
-            <Link key={p._id} to={`/posts/${p._id}`} className="searchLinks">
-              <img src={p.postImg} alt="post" className="searchImgs" />
-            </Link>
-          );
-        })}
+      <div className="searchContainer">
+        <div className="searchField">
+          <input
+            label="Search"
+            placeholder="Search posts..."
+            onChange={inputHandler}
+          />
+        </div>
+        <div className="searchImgContainer">
+          {filteredData.map((p) => {
+            return (
+              <Link key={p._id} to={`/posts/${p._id}`} className="searchLinks">
+                <img src={p.postImg} alt="post" className="searchImgs" />
+              </Link>
+            );
+          })}
+        </div>
       </div>
       <FooterNav user={user._id} />
     </>

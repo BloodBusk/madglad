@@ -9,13 +9,13 @@
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 1em 1em -1em rgba(0, 0, 0, .25);
-  background: white;
+  background: rgb(30, 30, 30);
 }
 
 .logo {
   text-transform: uppercase;
   text-decoration: none;
-  color: black;
+  color: white;
 }
 
 .logoMad {

@@ -1,22 +1,28 @@
 :root {
+  /* user */
   --color-1: linear-gradient(to right, #ff512f, #f09819);
+  /* restaurant */
   --color-2: linear-gradient(#1845ad, #23a2f6);
   --font-size-1: 30px;
   --font-size-2: 25px;
   --font-size-3: 20px;
   --font-size-4: 18px;
+  --background-1: rgb(44, 44, 44);
+  --input-1: rgba(255, 255, 255, 0.07);
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .profileImgHeader {
   width: 50px;
   height: 50px;
   border-radius: 50%;
+  margin-right: 10px;
 }
 
 .socialIcons {
