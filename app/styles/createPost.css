@@ -1,0 +1,99 @@
+.createPostContainer {
+  padding: 5vh 0;
+  min-height: 100vh;
+  background-color: var(--background-1);
+  color: white;
+}
+
+.createPostForm {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  margin: auto;
+}
+
+.errorMessages{
+  color: red;
+}
+
+.createPostForm input {
+  padding: 5px;
+  font-size: var(--font-size-4);
+  color: white;
+  background: var(--input-1);
+  border: none;
+  margin-bottom: 1vh;
+  margin-top: 1vh;
+}
+
+.createPostForm button {
+  border: none;
+  margin-bottom: 1vh;
+  margin-top: 1vh;
+}
+
+.createPostTag {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+.createPostTag input {
+  width: 75%;
+}
+
+.createPostTag button {
+  padding: 5px;
+  font-size: 16px;
+  color: white;
+  width: 25%;
+  background: transparent;
+  box-shadow: 0px 0px 4px black;
+}
+
+.addedTags input{
+    background: transparent;
+    font-size: 14px;
+}
+
+.createPostForm textarea{
+    padding: 5px;
+    background-color: var(--input-1);
+    border: none;
+    min-height: 20vh;
+    font-size: var(--font-size-4);
+    color: white;
+    margin-bottom: 1vh;
+    margin-top: 1vh;
+}
+
+.createPostRating{
+    padding: 5px;
+    background: var(--input-1);
+    border: none;
+    color: white;
+    margin-bottom: 2vh;
+    margin-top: 1vh;
+}
+
+.createPostRating option{
+    color: black;
+}
+
+.createPostButton{
+    width: 100%;
+    padding: 10px 20px;
+    margin-top: 3vh;
+    font-size: var(--font-size-3);
+    background: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    color: black;
+    cursor: pointer;
+}
+
+@media screen and (min-width: 600px) {
+    .createPostForm {
+      width: 500px;
+    }
+  }

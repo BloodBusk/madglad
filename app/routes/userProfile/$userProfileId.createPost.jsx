@@ -9,6 +9,7 @@ import { useLoaderData, useActionData, Form } from "@remix-run/react";
 import { requireUserSession } from "~/session.server.js";
 import connectDb from "~/db/connectDb.server.js";
 import { findProfileByUser, findAllRestaurants } from "~/db/dbF";
+import { validateEmptyField } from "../services/validate.jsx";
 
 import style from "~/styles/createPost.css";
 
@@ -60,19 +61,26 @@ export async function action({ request }) {
     request,
     fileUploadHandler
   );
-  const pathName = formData.get("upload").filepath;
-  const pathSearch = pathName.search("uploads");
-  const pathString = pathName.slice(pathSearch - 1);
+  const upload = formData.get("upload");
 
-  //error handling
-  //   const formErrors = {
-  //     fullName: validateEmptyField(),
-  //     bio: validateEmptyField(),
-  //     tags: validateEmptyField(),
-  //   };
-  //   if (Object.values(formErrors).some(Boolean)) {
-  //     return { formErrors };
-  //   }
+  //form error handling
+  const formErrors = {
+    title: validateEmptyField(title, "title"),
+    restaurantName: validateEmptyField(restaurantName, "restaurantName"),
+  };
+  if (Object.values(formErrors).some(Boolean)) {
+    return { formErrors };
+  }
+
+  let pathString = "";
+  //file path variables need to be handled if filepath is null
+  if (upload == null) {
+    pathString = "";
+  } else {
+    const pathName = upload.filepath;
+    const pathSearch = pathName.search("uploads");
+    pathString = pathName.slice(pathSearch - 1);
+  }
 
   if (_action === "createPost") {
     try {
@@ -126,9 +134,14 @@ export default function CreatePost() {
     setTags((prevTags) => [...prevTags, input]);
   };
   return (
-    <div>
-      <Form method="post" encType="multipart/form-data">
+    <div className="createPostContainer">
+      <Form
+        method="post"
+        encType="multipart/form-data"
+        className="createPostForm"
+      >
         <input type="text" name="title" placeholder="title..."></input>
+        <p className="errorMessages">{actionData?.formErrors?.title}</p>
         {/* todo geolocation */}
         <input
           type="text"
@@ -137,6 +150,9 @@ export default function CreatePost() {
           list="restaurantList"
           onChange={inputHandler}
         />
+        <p className="errorMessages">
+          {actionData?.formErrors?.restaurantName}
+        </p>
         <datalist id="restaurantList">
           {filteredData?.map((fd, i) => {
             return <option key={i}>{fd.username}</option>;
@@ -144,35 +160,59 @@ export default function CreatePost() {
         </datalist>
 
         <input type="file" name="upload" />
-
-        <input type="text" placeholder="add tags..." list="tagList" onChange={saveInput} />
-        <datalist id="tagList">
-          <option value="3 Course Meal" />
-          <option value="Brunch" />
-          <option value="Breakfast" />
-          <option value="Lunch" />
-          <option value="Dinner" />
-          <option value="Italian" />
-          <option value="Danish" />
-        </datalist>
-        <button type="button" onClick={addToArray}>
-          Add Tag
-        </button>
-        {tags?.map((t, i) => {
-          return <input key={i} type="text" name="tags" defaultValue={t} />;
-        })}
+        <p className="errorMessages">{actionData?.formErrors?.upload}</p>
+        <div className="createPostTag">
+          <input
+            type="text"
+            placeholder="add tags..."
+            list="tagList"
+            onChange={saveInput}
+          />
+          <datalist id="tagList">
+            <option value="3 Course Meal" />
+            <option value="Brunch" />
+            <option value="Breakfast" />
+            <option value="Lunch" />
+            <option value="Dinner" />
+            <option value="Italian" />
+            <option value="Danish" />
+          </datalist>
+          <button type="button" onClick={addToArray}>
+            Add Tag
+          </button>
+        </div>
+        <div className="addedTags">
+          {tags?.map((t, i) => {
+            return (
+              <input
+                key={i}
+                type="text"
+                name="tags"
+                defaultValue={t}
+                disabled
+              />
+            );
+          })}
+        </div>
         <textarea type="text" name="review" placeholder="review..." />
-        <select name="rating">
+        <label>Rating</label>
+        <select name="rating" className="createPostRating">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
           <option value="4">4</option>
           <option value="5">5</option>
         </select>
-        <button type="submit" name="_action" value="createPost">
+        <button
+          type="submit"
+          name="_action"
+          value="createPost"
+          className="createPostButton"
+        >
           Create Post
         </button>
-        {actionData?.errorMessage}
+        <p className="errorMessages">{actionData?.errorMessage}</p>
+        <p className="errorMessages">{actionData?.pathNameErrorMessage}</p>
       </Form>
     </div>
   );

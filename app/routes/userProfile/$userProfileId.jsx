@@ -162,7 +162,7 @@ export default function UserProfileId() {
               className="profileImgHeader"
             />
             {/* checks if the user is verified */}
-            <h3>
+            <h3 className="userColor">
               {profile.username}{" "}
               {profile.isVerified ? (
                 <img src={verified} alt="verified" className="verifiedIcon" />
@@ -172,7 +172,7 @@ export default function UserProfileId() {
             </h3>
           </div>
           {/* followers / followings / posts */}
-          <div>
+          <div className="profileInfo">
             <div>
               <p>Posts</p>
               <p>{postsCount}</p>
@@ -187,7 +187,7 @@ export default function UserProfileId() {
             </div>
           </div>
           {/* social media */}
-          <div>
+          <div className="socialMediaIcons">
             {profile.facebook !== "" ? (
               <a href={profile.facebook} target="_blank" rel="noreferrer">
                 <img src={facebook} alt="facebook" className="socialIcons" />

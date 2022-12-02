@@ -35,7 +35,7 @@ export default function SinglePost({ post }) {
       </div>
       <h3> {post.title} </h3>
       <Link to={`/posts/${post._id}`}>
-        <img className="postImg" src={post.postImg} alt="posts img" />
+        <img className="postImg" src={post.postImg} alt="" />
       </Link>
       <div className="singlePostIconContainer">
         <div>
