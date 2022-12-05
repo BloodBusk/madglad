@@ -10,10 +10,10 @@ import connectDb from "~/db/connectDb.server";
 import { findUserById, findProfileByUser } from "~/db/dbF";
 
 //img imports
-import facebook from "~/imgs/facebook-f.svg";
-import instagram from "~/imgs/instagram.svg";
-import twitter from "~/imgs/twitter.svg";
-import tiktok from "~/imgs/tiktok.svg";
+import facebook from "~/imgs/facebook.png";
+import instagram from "~/imgs/instagram.png";
+import twitter from "~/imgs/twitter.png";
+import tiktok from "~/imgs/tiktok.png";
 
 //components
 import Header from "~/routes/components/header.jsx";
@@ -42,6 +42,8 @@ export async function action({ request }) {
   const db = await connectDb();
   const session = await requireUserSession(request);
   const userId = session.get("userId");
+  const user = await findUserById(db, userId);
+  const profile = await findProfileByUser(db, user);
 
   //img update
   const fileUploadHandler = unstable_createFileUploadHandler({
@@ -54,9 +56,17 @@ export async function action({ request }) {
     request,
     fileUploadHandler
   );
-  const pathName = formData.get("upload").filepath;
-  const pathSearch = pathName.search("uploads");
-  const pathString = pathName.slice(pathSearch - 1);
+  const upload = formData.get("upload");
+
+  let pathString = "";
+  //file path variables need to be handled if filepath is null
+  if (upload == null) {
+    pathString = profile.profileImg;
+  } else {
+    const pathName = upload.filepath;
+    const pathSearch = pathName.search("uploads");
+    pathString = pathName.slice(pathSearch - 1);
+  }
 
   try {
     await db.models.Profile.updateOne(
@@ -79,33 +89,60 @@ export default function UpdateProfile() {
   return (
     <>
       <Header profile={profile} />
-      <Form method="post" encType="multipart/form-data" className="updateProfileForm">
-        <input type="file" name="upload" />
-        <img src={facebook} alt="facebook img" className="updateProfileIcon" />
-        <input
-          type="text"
-          name="facebook"
-          placeholder="place your facebook link here..."
-        />
-        <img src={instagram} alt="facebook img" className="updateProfileIcon" />
-        <input
-          type="text"
-          name="instagram"
-          placeholder="place your instagram link here..."
-        />
-        <img src={twitter} alt="facebook img" className="updateProfileIcon" />
-        <input
-          type="text"
-          name="twitter"
-          placeholder="place your twitter link here..."
-        />
-        <img src={tiktok} alt="facebook img" className="updateProfileIcon" />
-        <input
-          type="text"
-          name="tiktok"
-          placeholder="place your tiktok link here..."
-        />
-        <button type="submit">Update</button>
+      <Form
+        method="post"
+        encType="multipart/form-data"
+        className="updateProfileForm"
+      >
+        <input type="file" name="upload" className="input-1" />
+        <div>
+          <img
+            src={facebook}
+            alt="facebook img"
+            className="updateProfileIcon"
+          />
+          <input
+            type="text"
+            name="facebook"
+            placeholder="place your facebook link here..."
+            className="input-1"
+          />
+        </div>
+        <div>
+          <img
+            src={instagram}
+            alt="facebook img"
+            className="updateProfileIcon"
+          />
+          <input
+            type="text"
+            name="instagram"
+            placeholder="place your instagram link here..."
+            className="input-1"
+          />
+        </div>
+        <div>
+          <img src={twitter} alt="facebook img" className="updateProfileIcon" />
+          <input
+            type="text"
+            name="twitter"
+            placeholder="place your twitter link here..."
+            className="input-1"
+          />
+        </div>
+        <div>
+          <img src={tiktok} alt="facebook img" className="updateProfileIcon" />
+          <input
+            type="text"
+            name="tiktok"
+            placeholder="place your tiktok link here..."
+            className="input-1"
+          />
+        </div>
+
+        <button type="submit" className="button-2">
+          Update
+        </button>
       </Form>
       <FooterNav user={user._id} />
     </>

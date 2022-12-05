@@ -25,10 +25,11 @@ export default function SinglePost({ post }) {
             alt="profile img"
             className="profileImgHeader"
           />
-          <h4>{post?.profileId?.username}</h4>
+          <h4 className="userColor">{post?.profileId?.username}</h4>
         </Link>
         <Link
           to={post.restaurantId ? `/profiles/${post.restaurantId?._id}` : ""}
+          className="restaurantColor"
         >
           {post?.restaurantName}
         </Link>
@@ -47,7 +48,11 @@ export default function SinglePost({ post }) {
               onClick={handleLiked}
               className="likeBtn"
             >
-              <img src={liked ? LikeSolid : LikeRegular} alt="like icon" className="postIcons" />
+              <img
+                src={liked ? LikeSolid : LikeRegular}
+                alt="like icon"
+                className="postIcons"
+              />
             </button>
             <input type="hidden" defaultValue={post._id} name="hiddenPostId" />
           </Form>

@@ -16,12 +16,12 @@ import {
 } from "~/db/dbF.js";
 
 //imgs
-import facebook from "~/imgs/facebook-f.svg";
-import instagram from "~/imgs/instagram.svg";
-import twitter from "~/imgs/twitter.svg";
-import tiktok from "~/imgs/tiktok.svg";
+import facebook from "~/imgs/facebook.png";
+import instagram from "~/imgs/instagram.png";
+import twitter from "~/imgs/twitter.png";
+import tiktok from "~/imgs/tiktok.png";
 import defaultProfile from "~/imgs/user.png";
-import settings from "~/imgs/settings.png";
+import settings from "~/imgs/settings.svg";
 import verified from "~/imgs/verified.png";
 
 //components
@@ -45,9 +45,9 @@ export async function loader({ request }) {
   const db = await connectDb();
   const user = await findUserById(db, userId);
   const profile = await findProfileByUser(db, user);
-  const posts = await db.models.Post.find({ profileId: profile._id }).populate(
-    "profileId"
-  );
+  const posts = await db.models.Post.find({ profileId: profile._id })
+    .populate("profileId")
+    .populate("restaurantId");
   const postsCount = await findPostsCountByProfile(db, profile);
   return { profile, user, posts, postsCount };
 }
@@ -122,16 +122,25 @@ export async function action({ request }) {
 
 export default function UserProfileId() {
   const { profile, user, posts, postsCount } = useLoaderData();
-  const [showSettings, setShowSettings] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
+  const [showSettings, setShowSettings] = useState(null);
+  const [showDelete, setShowDelete] = useState(null);
+  const [showEdit, setShowEdit] = useState(null);
 
-  const showPostSettings = () => {
-    setShowSettings((showSettings) => !showSettings);
+  //used index to handle no more than the selected to show when pressed
+  const showPostSettings = (index) => {
+    setShowSettings(
+      (showSettings) => {
+        return showSettings === index ? null : index;
+      },
+      setShowEdit(false),
+      setShowDelete(false)
+    );
   };
 
-  const showDeleteOptions = () => {
-    setShowDelete((showDelete) => !showDelete);
+  const showDeleteOptions = (index) => {
+    setShowDelete((showDelete) => {
+      return showDelete === index ? null : index;
+    }, setShowSettings(false));
   };
 
   const handleDeleteNo = () => {
@@ -139,8 +148,10 @@ export default function UserProfileId() {
     setShowSettings(false);
   };
 
-  const showEditOptions = () => {
-    setShowEdit((showEdit) => !showEdit);
+  const showEditOptions = (index) => {
+    setShowEdit((showEdit) => {
+      return showEdit === index ? null : index;
+    }, setShowSettings(false));
   };
 
   return (
@@ -225,75 +236,108 @@ export default function UserProfileId() {
               <div key={p._id} className="settingsContainer">
                 <button
                   type="button"
-                  onClick={showPostSettings}
+                  onClick={() => showPostSettings(p._id)}
                   className="settingsButton"
                 >
                   <img src={settings} alt="settings" className="settingsImg" />
                 </button>
                 {showSettings ? (
-                  <>
-                    <button type="button" onClick={showEditOptions}>
+                  <div
+                    className={
+                      showSettings === p._id
+                        ? "settingsDropDownContainer"
+                        : "hidden"
+                    }
+                    style={{
+                      display: showSettings === p._id ? "flex" : "none",
+                    }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => showEditOptions(p._id)}
+                      className="button-1"
+                    >
                       Edit
                     </button>
-                    <button type="button" onClick={showDeleteOptions}>
+                    <button
+                      type="button"
+                      onClick={() => showDeleteOptions(p._id)}
+                      className="button-1"
+                    >
                       Delete
                     </button>
-
-                    {showEdit ? (
-                      <>
-                        <Form method="POST" reloadDocument>
-                          <input
-                            type="text"
-                            defaultValue={p.title}
-                            name="title"
-                          />
-                          <input
-                            type="text"
-                            defaultValue={p.restaurantName}
-                            name="restaurantName"
-                          />
-                          <input
-                            type="text"
-                            defaultValue={p.review}
-                            name="review"
-                          />
-                          <input
-                            type="hidden"
-                            name="hiddenPostId"
-                            defaultValue={p._id}
-                          />
-                          <button type="submit" name="_action" value="editPost">
-                            Done
-                          </button>
-                        </Form>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                    {showDelete ? (
-                      <>
-                        <Form method="DELETE">
-                          <label>Are you Sure you want to Delete?</label>
-                          <button
-                            type="submit"
-                            name="_action"
-                            value="deletePost"
-                          >
-                            Yes
-                          </button>
-                          <input
-                            type="hidden"
-                            name="hiddenPostId"
-                            defaultValue={p._id}
-                          />
-                        </Form>
-                        <button type="button" onClick={handleDeleteNo}>
-                          No
+                  </div>
+                ) : (
+                  ""
+                )}
+                {showEdit ? (
+                  <>
+                    <Form
+                      method="POST"
+                      reloadDocument
+                      className={showEdit === p._id ? "showEdit" : "hidden"}
+                      style={{
+                        display: showEdit === p._id ? "flex" : "none",
+                      }}
+                    >
+                      <input type="text" defaultValue={p.title} name="title" />
+                      <input
+                        type="text"
+                        defaultValue={p.restaurantName}
+                        name="restaurantName"
+                      />
+                      <textarea
+                        type="text"
+                        defaultValue={p.review}
+                        name="review"
+                      />
+                      <input
+                        type="hidden"
+                        name="hiddenPostId"
+                        defaultValue={p._id}
+                      />
+                      <button type="submit" name="_action" value="editPost">
+                        Done
+                      </button>
+                    </Form>
+                  </>
+                ) : (
+                  ""
+                )}
+                {showDelete ? (
+                  <>
+                    <div
+                      className={showDelete === p._id ? "showDelete" : "hidden"}
+                      style={{
+                        display: showDelete === p._id ? "flex" : "none",
+                      }}
+                    >
+                      <Form method="DELETE">
+                        <label>
+                          Are you Sure you want to delete this post?
+                        </label>
+                        <button
+                          type="submit"
+                          name="_action"
+                          value="deletePost"
+                          className="button-1"
+                        >
+                          Yes
                         </button>
-                      </>
-                    ) : (
-                      ""
-                    )}
+                        <input
+                          type="hidden"
+                          name="hiddenPostId"
+                          defaultValue={p._id}
+                        />
+                      </Form>
+                      <button
+                        type="button"
+                        onClick={handleDeleteNo}
+                        className="button-1"
+                      >
+                        No
+                      </button>
+                    </div>
                   </>
                 ) : (
                   ""

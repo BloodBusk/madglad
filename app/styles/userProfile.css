@@ -1,64 +1,156 @@
-.userProfileContainer{
-    padding: 10vh 0;
-    background-color: var(--background-1);
+.userProfileContainer {
+  padding: 10vh 0;
+  background-color: var(--background-1);
+  min-height: 100vh;
 }
 
-.verifiedIcon{
-    width: 10px;
+.verifiedIcon {
+  width: 10px;
 }
 
-.userProfileId_container{
-    width: 95%;
-    margin: auto;
-    color: white;
+.userProfileId_container {
+  width: 95%;
+  margin: auto;
+  color: white;
 }
 
-.profileServiceLinks{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2vh;
+.profileServiceLinks {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2vh;
 }
 
-.profileServiceLinks a{
-    text-decoration: none;
-    color: white;
+.profileServiceLinks a {
+  text-decoration: none;
+  color: white;
 }
 
-.userProfileId_1{
-    display: flex;
-    align-items: center;
+.userProfileId_1 {
+  display: flex;
+  align-items: center;
 }
 
-.profileInfo{
-    margin-top: 2vh;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+.profileInfo {
+  margin-top: 2vh;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
-.profileInfo div{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
+.profileInfo div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 33%;
 }
 
-.socialMediaIcons{
-    margin-top: 3vh;
-    margin-bottom: 3vh;
-    display: flex;
-    justify-content: space-evenly;
+.followBtnContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 2vh;
 }
 
+.followBtn {
+  border: 1px solid black;
+  padding: 5px 15px;
+  text-decoration: none;
+  color: white;
+  box-shadow: 1px 1px 4px black;
+  background: transparent;
+}
 
+.socialMediaIcons {
+  margin-top: 3vh;
+  margin-bottom: 3vh;
+  display: flex;
+  justify-content: space-evenly;
+}
 
+.settingsButton {
+  margin-bottom: -40px;
+  margin-right: 2.5%;
+}
 
+.settingsContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: relative;
 
+}
+.settingsButton {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.settingsImg {
+  width: 30px;
+}
+.settingsDropDownContainer {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  width: 30%;
+  background: var(--background-1);
+}
 
-.settingsButton{
-    margin-bottom: -40px;
-    margin-right: 2.5%;
+.showEdit {
+  width: 100%;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.showEdit input, textarea{
+  width: 90%;
+  margin: 0 auto 1vh auto ;
+  padding: 5px;
+  font-size: var(--font-size-4);
+  border-radius: 5px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.07);
+  color: white;
+}
+
+.showEdit button {
+  width: 50%;
+  padding: 5px 10px;
+  margin-top: 1vh;
+  font-size: var(--font-size-4);
+  background: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  color: black;
+  cursor: pointer;
+}
+
+.showDelete{
+  width: 100%;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.showDelete label{
+  color: white;
+}
+
+.showDelete form{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.showDelete button{
+  margin: 1vh 0;
+  width: 50%;
 }

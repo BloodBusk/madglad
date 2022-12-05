@@ -8,8 +8,12 @@ import {
 import { useLoaderData, useActionData, Form } from "@remix-run/react";
 import { requireUserSession } from "~/session.server.js";
 import connectDb from "~/db/connectDb.server.js";
-import { findProfileByUser, findAllRestaurants } from "~/db/dbF";
+import { findProfileByUser, findAllRestaurants, findUserById } from "~/db/dbF";
 import { validateEmptyField } from "../services/validate.jsx";
+
+//components
+import Header from "~/routes/components/header.jsx";
+import FooterNav from "~/routes/components/footerNav.jsx";
 
 import style from "~/styles/createPost.css";
 
@@ -24,9 +28,11 @@ export async function loader({ request }) {
   const session = await requireUserSession(request);
   const userId = session.get("userId");
   const db = await connectDb();
+  const loggedProfile = await findProfileByUser(db, userId);
+  const user = await findUserById(db, userId);
   const restaurants = await findAllRestaurants(db);
   const profile = await findProfileByUser(db, userId);
-  return { restaurants, profile };
+  return { restaurants, profile, loggedProfile, user };
 }
 
 export async function action({ request }) {
@@ -106,7 +112,7 @@ export async function action({ request }) {
 }
 
 export default function CreatePost() {
-  const { restaurants, profile } = useLoaderData();
+  const { restaurants, profile, loggedProfile, user } = useLoaderData();
   const [tags, setTags] = useState([]);
   const [input, setInput] = useState([]);
   const [inputText, setInputText] = useState("");
@@ -134,6 +140,8 @@ export default function CreatePost() {
     setTags((prevTags) => [...prevTags, input]);
   };
   return (
+    <>
+    <Header profile={loggedProfile} />
     <div className="createPostContainer">
       <Form
         method="post"
@@ -215,5 +223,7 @@ export default function CreatePost() {
         <p className="errorMessages">{actionData?.pathNameErrorMessage}</p>
       </Form>
     </div>
+    <FooterNav user={user._id} />
+    </>
   );
 }

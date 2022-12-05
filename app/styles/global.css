@@ -52,3 +52,34 @@
   width: 30px;
   height: 30px;
 }
+
+.button-1 {
+  padding: 1px;
+  font-size: var(--font-size-4);
+  background: transparent;
+  color: white;
+  box-shadow: 0px 0px 4px black;
+  border: none;
+}
+
+.button-2{
+  padding: 5px 10px;
+  margin-top: 1vh;
+  font-size: var(--font-size-4);
+  background: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  color: black;
+  cursor: pointer;
+}
+
+.input-1{
+  margin: 0 auto 1vh auto ;
+  padding: 5px;
+  font-size: var(--font-size-4);
+  border-radius: 5px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.07);
+  color: white;
+}
