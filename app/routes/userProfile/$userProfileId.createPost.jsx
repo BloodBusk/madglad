@@ -139,91 +139,92 @@ export default function CreatePost() {
   const addToArray = () => {
     setTags((prevTags) => [...prevTags, input]);
   };
+
+  const removeTagItem = (t) => {
+    setTags(tags.filter((item, index) => item !== t));
+  };
   return (
     <>
-    <Header profile={loggedProfile} />
-    <div className="createPostContainer">
-      <Form
-        method="post"
-        encType="multipart/form-data"
-        className="createPostForm"
-      >
-        <input type="text" name="title" placeholder="title..."></input>
-        <p className="errorMessages">{actionData?.formErrors?.title}</p>
-        {/* todo geolocation */}
-        <input
-          type="text"
-          name="restaurantName"
-          placeholder="restaurant name..."
-          list="restaurantList"
-          onChange={inputHandler}
-        />
-        <p className="errorMessages">
-          {actionData?.formErrors?.restaurantName}
-        </p>
-        <datalist id="restaurantList">
-          {filteredData?.map((fd, i) => {
-            return <option key={i}>{fd.username}</option>;
-          })}
-        </datalist>
-
-        <input type="file" name="upload" />
-        <p className="errorMessages">{actionData?.formErrors?.upload}</p>
-        <div className="createPostTag">
+      <Header profile={loggedProfile} />
+      <div className="createPostContainer">
+        <Form
+          method="post"
+          encType="multipart/form-data"
+          className="createPostForm"
+        >
+          <input type="text" name="title" placeholder="title..."></input>
+          <p className="errorMessages">{actionData?.formErrors?.title}</p>
+          {/* todo geolocation */}
           <input
             type="text"
-            placeholder="add tags..."
-            list="tagList"
-            onChange={saveInput}
+            name="restaurantName"
+            placeholder="restaurant name..."
+            list="restaurantList"
+            onChange={inputHandler}
           />
-          <datalist id="tagList">
-            <option value="3 Course Meal" />
-            <option value="Brunch" />
-            <option value="Breakfast" />
-            <option value="Lunch" />
-            <option value="Dinner" />
-            <option value="Italian" />
-            <option value="Danish" />
+          <p className="errorMessages">
+            {actionData?.formErrors?.restaurantName}
+          </p>
+          <datalist id="restaurantList">
+            {filteredData?.map((fd, i) => {
+              return <option key={i}>{fd.username}</option>;
+            })}
           </datalist>
-          <button type="button" onClick={addToArray}>
-            Add Tag
+
+          <input type="file" name="upload" />
+          <p className="errorMessages">{actionData?.formErrors?.upload}</p>
+          <div className="createPostTag">
+            <input
+              type="text"
+              placeholder="add tags..."
+              list="tagList"
+              onChange={saveInput}
+            />
+            <datalist id="tagList">
+              <option value="3 Course Meal" />
+              <option value="Brunch" />
+              <option value="Breakfast" />
+              <option value="Lunch" />
+              <option value="Dinner" />
+              <option value="Italian" />
+              <option value="Danish" />
+            </datalist>
+            <button type="button" onClick={addToArray}>
+              Add Tag
+            </button>
+          </div>
+          <div className="addedTags">
+            {tags?.map((t) => {
+              return (
+                <div key={t} className="tagsContainer">
+                  <input type="text" name="tags" defaultValue={t} disabled />
+                  <p onClick={() => removeTagItem(t)} className="tagsDelete">x</p>
+                </div>
+              );
+            })}
+          </div>
+          <textarea type="text" name="review" placeholder="review..." />
+          <label>Rating</label>
+          <select name="rating" className="createPostRating">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+          <button
+            type="submit"
+            name="_action"
+            value="createPost"
+            className="createPostButton"
+          >
+            Create Post
           </button>
-        </div>
-        <div className="addedTags">
-          {tags?.map((t, i) => {
-            return (
-              <input
-                key={i}
-                type="text"
-                name="tags"
-                defaultValue={t}
-                disabled
-              />
-            );
-          })}
-        </div>
-        <textarea type="text" name="review" placeholder="review..." />
-        <label>Rating</label>
-        <select name="rating" className="createPostRating">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>
-        <button
-          type="submit"
-          name="_action"
-          value="createPost"
-          className="createPostButton"
-        >
-          Create Post
-        </button>
-        <p className="errorMessages">{actionData?.errorMessage}</p>
-        <p className="errorMessages">{actionData?.pathNameErrorMessage}</p>
-      </Form>
-    </div>
-    <FooterNav user={user._id} />
+          <p className="errorMessages">{actionData?.errorMessage}</p>
+          <p className="errorMessages">{actionData?.pathNameErrorMessage}</p>
+        </Form>
+      </div>
+      <FooterNav user={user._id} />
     </>
   );
 }

@@ -92,6 +92,16 @@
     cursor: pointer;
 }
 
+.tagsContainer{
+  display: flex;
+  align-items: center;
+}
+
+.tagsDelete{
+  color: red;
+  cursor: pointer;
+}
+
 @media screen and (min-width: 600px) {
     .createPostForm {
       width: 500px;
