@@ -3,6 +3,7 @@ import { Link, Form } from "@remix-run/react";
 import LikeRegular from "~/imgs/like-regular.svg";
 import LikeSolid from "~/imgs/like-solid.svg";
 import Comment from "~/imgs/comment.svg";
+import verified from "~/imgs/verified.png";
 
 export default function SinglePost({ post }) {
   const [countComments, setCountComments] = useState(post.comments?.length);
@@ -25,7 +26,12 @@ export default function SinglePost({ post }) {
             alt="profile img"
             className="profileImgHeader"
           />
-          <h4 className="userColor">{post?.profileId?.username}</h4>
+          <h4 className="userColor">{post?.profileId?.username} {post?.profileId?.isVerified ? (
+                <img src={verified} alt="verified" className="verifiedIcon" />
+              ) : (
+                ""
+              )}</h4>
+          
         </Link>
         <Link
           to={post.restaurantId ? `/profiles/${post.restaurantId?._id}` : ""}
