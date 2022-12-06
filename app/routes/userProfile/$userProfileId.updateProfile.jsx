@@ -45,6 +45,15 @@ export async function action({ request }) {
   const user = await findUserById(db, userId);
   const profile = await findProfileByUser(db, user);
 
+  const clonedData = request.clone();
+  const form = await clonedData.formData();
+
+  //form variables
+  let facebook = form.get("facebook");
+  let instagram = form.get("instagram");
+  let twitter = form.get("twitter");
+  let tiktok = form.get("tiktok");
+
   //img update
   const fileUploadHandler = unstable_createFileUploadHandler({
     avoidFileConflicts: true,
@@ -74,6 +83,10 @@ export async function action({ request }) {
       {
         $set: {
           profileImg: pathString,
+          facebook: facebook,
+          instagram: instagram,
+          twitter: twitter,
+          tiktok: tiktok,
         },
       }
     );
@@ -106,6 +119,7 @@ export default function UpdateProfile() {
             name="facebook"
             placeholder="place your facebook link here..."
             className="input-1"
+            defaultValue={profile.facebook}
           />
         </div>
         <div>
@@ -119,6 +133,7 @@ export default function UpdateProfile() {
             name="instagram"
             placeholder="place your instagram link here..."
             className="input-1"
+            defaultValue={profile.instagram}
           />
         </div>
         <div>
@@ -128,6 +143,7 @@ export default function UpdateProfile() {
             name="twitter"
             placeholder="place your twitter link here..."
             className="input-1"
+            defaultValue={profile.twitter}
           />
         </div>
         <div>
@@ -137,6 +153,7 @@ export default function UpdateProfile() {
             name="tiktok"
             placeholder="place your tiktok link here..."
             className="input-1"
+            defaultValue={profile.tiktok}
           />
         </div>
 
