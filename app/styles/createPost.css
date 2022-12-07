@@ -102,6 +102,16 @@
   cursor: pointer;
 }
 
+.ratingStarContainer{
+  display: flex;
+  justify-content: center;
+}
+
+.ratingStar{
+  width: 20px;
+  margin-bottom: 2vh;
+}
+
 @media screen and (min-width: 600px) {
     .createPostForm {
       width: 500px;

@@ -11,6 +11,9 @@ import connectDb from "~/db/connectDb.server.js";
 import { findProfileByUser, findAllRestaurants, findUserById } from "~/db/dbF";
 import { validateEmptyField } from "../services/validate.jsx";
 
+//imgs
+import star from "~/imgs/star.svg";
+
 //components
 import Header from "~/routes/components/header.jsx";
 import FooterNav from "~/routes/components/footerNav.jsx";
@@ -116,6 +119,7 @@ export default function CreatePost() {
   const [tags, setTags] = useState([]);
   const [input, setInput] = useState([]);
   const [inputText, setInputText] = useState("");
+  const [rating, setRating] = useState(1);
   const actionData = useActionData();
   //search handler for restaurant
   let inputHandler = (e) => {
@@ -143,6 +147,11 @@ export default function CreatePost() {
   const removeTagItem = (t) => {
     setTags(tags.filter((item, index) => item !== t));
   };
+
+  const handleRatingChange = (e) => {
+    setRating(e.target.value);
+  };
+
   return (
     <>
       <Header profile={loggedProfile} />
@@ -198,20 +207,31 @@ export default function CreatePost() {
               return (
                 <div key={t} className="tagsContainer">
                   <input type="text" name="tags" defaultValue={t} disabled />
-                  <p onClick={() => removeTagItem(t)} className="tagsDelete">x</p>
+                  <p onClick={() => removeTagItem(t)} className="tagsDelete">
+                    x
+                  </p>
                 </div>
               );
             })}
           </div>
           <textarea type="text" name="review" placeholder="review..." />
           <label>Rate din oplevelse med maden</label>
-          <select name="rating" className="createPostRating">
+          <select
+            name="rating"
+            onChange={handleRatingChange}
+            className="createPostRating"
+          >
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
             <option value="5">5</option>
           </select>
+          <div className="ratingStarContainer">
+            {Array.from({ length: rating }, (_, i) => (
+              <img key={i} src={star} alt="star" className="ratingStar" />
+            ))}
+          </div>
           <button
             type="submit"
             name="_action"

@@ -59,6 +59,15 @@
 .postIdReview {
   margin: 1vh 0;
 }
+.ratingStarContainer{
+  display: flex;
+  justify-content: center;
+}
+
+.ratingStar{
+  width: 20px;
+  margin-bottom: 2vh;
+}
 
 .postIdBtns{
   display: flex;

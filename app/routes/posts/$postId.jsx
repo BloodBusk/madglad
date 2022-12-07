@@ -5,6 +5,9 @@ import connectDb from "~/db/connectDb.server";
 import { findPostById, findProfileByUser } from "~/db/dbF";
 import { getLoggedUser } from "~/session.server";
 
+//imgs
+import star from "~/imgs/star.svg";
+
 //components
 import Header from "~/routes/components/header.jsx";
 import FooterNav from "~/routes/components/footerNav.jsx";
@@ -113,6 +116,11 @@ export default function PostId() {
           })}
         </div>
         <p className="postIdReview">{postxProfile?.review}</p>
+        <div className="ratingStarContainer">
+            {Array.from({ length: postxProfile.rating }, (_, i) => (
+              <img key={i} src={star} alt="star" className="ratingStar" />
+            ))}
+          </div>
         <div className="postIdBtns">
           {postxProfile.restaurantId ? (
             <Link to={postxProfile.restaurantId.bookingLink}>Book Her</Link>
