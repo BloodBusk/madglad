@@ -1,4 +1,5 @@
 .postIdContainer {
+  height: 100vh;
   padding: 10vh 2vw;
   background: rgb(44, 44, 44);
   color: white;

@@ -53,6 +53,7 @@ export async function action({ request }) {
   let instagram = form.get("instagram");
   let twitter = form.get("twitter");
   let tiktok = form.get("tiktok");
+  let bookingLink = form.get("bookingLink");
 
   //img update
   const fileUploadHandler = unstable_createFileUploadHandler({
@@ -87,6 +88,7 @@ export async function action({ request }) {
           instagram: instagram,
           twitter: twitter,
           tiktok: tiktok,
+          bookingLink: bookingLink,
         },
       }
     );
@@ -155,6 +157,10 @@ export default function UpdateProfile() {
             className="input-1"
             defaultValue={profile.tiktok}
           />
+        </div>
+
+        <div>
+          <input type="text" name="bookingLink" defaultValue={profile.bookingLink} placeholder="place your booking link her..." className="input-1" />
         </div>
 
         <button type="submit" className="button-2">

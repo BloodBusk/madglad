@@ -127,19 +127,20 @@ export default function PostId() {
           ))}
         </div>
         <div className="postIdBtns">
-          {postxProfile.restaurantId ? (
-            <Link to={postxProfile.restaurantId.bookingLink}>Book Her</Link>
+          {postxProfile.restaurantId.bookingLink !== "" ? (
+            <a href={postxProfile.restaurantId.bookingLink} target="_blank" rel="noreferrer">Book Her</a>
           ) : (
             ""
           )}
-          <div className="postGeobtn">
+          {postxProfile.geolocation !== "" ? (<div className="postGeobtn">
             <button onClick={handlePopup} type="button">
               Addresse
             </button>
             <p className={showPopup ? "popupContainer" : "hidden"}>
               {postxProfile.geolocation}
             </p>
-          </div>
+          </div>) : ""}
+          
         </div>
         <Form method="post" className="postIdCommentForm">
           <input type="text" name="comment" placeholder="kommentar..." />
