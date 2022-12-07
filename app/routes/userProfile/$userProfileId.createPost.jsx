@@ -10,6 +10,8 @@ import { requireUserSession } from "~/session.server.js";
 import connectDb from "~/db/connectDb.server.js";
 import { findProfileByUser, findAllRestaurants, findUserById } from "~/db/dbF";
 import { validateEmptyField } from "../services/validate.jsx";
+import { MAPS_API_KEY } from "~/db/connectMaps.server";
+import { useJsApiLoader, Autocomplete } from "@react-google-maps/api";
 
 //imgs
 import star from "~/imgs/star.svg";
@@ -35,7 +37,7 @@ export async function loader({ request }) {
   const user = await findUserById(db, userId);
   const restaurants = await findAllRestaurants(db);
   const profile = await findProfileByUser(db, userId);
-  return { restaurants, profile, loggedProfile, user };
+  return { restaurants, profile, loggedProfile, user, MAPS_API_KEY };
 }
 
 export async function action({ request }) {
@@ -54,6 +56,7 @@ export async function action({ request }) {
   let restaurantName = form.get("restaurantName");
   let review = form.get("review");
   let rating = form.get("rating");
+  let geolocation = form.get("geolocation");
 
   const restaurantProfile = await db.models.Profile.findOne({
     username: restaurantName,
@@ -99,7 +102,7 @@ export async function action({ request }) {
         tags: tags,
         restaurantName: restaurantName,
         review: review,
-        geolocation: "",
+        geolocation: geolocation,
         rating: rating,
         likes: [],
         comments: [],
@@ -115,7 +118,8 @@ export async function action({ request }) {
 }
 
 export default function CreatePost() {
-  const { restaurants, profile, loggedProfile, user } = useLoaderData();
+  const { restaurants, profile, loggedProfile, user, MAPS_API_KEY } =
+    useLoaderData();
   const [tags, setTags] = useState([]);
   const [input, setInput] = useState([]);
   const [inputText, setInputText] = useState("");
@@ -152,6 +156,15 @@ export default function CreatePost() {
     setRating(e.target.value);
   };
 
+  //maps
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: MAPS_API_KEY,
+    libraries: ["places"],
+  });
+  if (!isLoaded) {
+    return null;
+  }
+
   return (
     <>
       <Header profile={loggedProfile} />
@@ -163,7 +176,6 @@ export default function CreatePost() {
         >
           <input type="text" name="title" placeholder="title..."></input>
           <p className="errorMessages">{actionData?.formErrors?.title}</p>
-          {/* todo geolocation */}
           <input
             type="text"
             name="restaurantName"
@@ -179,6 +191,16 @@ export default function CreatePost() {
               return <option key={i}>{fd.username}</option>;
             })}
           </datalist>
+
+          {/* todo geolocation */}
+          <Autocomplete >
+            <input
+              type="text"
+              name="geolocation"
+              placeholder="restaurant address"
+              className="geoAutocomplete"
+            />
+          </Autocomplete>
 
           <input type="file" name="upload" />
           <p className="errorMessages">{actionData?.formErrors?.upload}</p>

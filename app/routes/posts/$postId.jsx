@@ -67,6 +67,7 @@ export default function PostId() {
   const { postxProfile, userId, loggedInUserProfile } = useLoaderData();
   const actionData = useActionData();
   const [commentSize, setCommentSize] = useState(3);
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleShowMore = () => {
     setCommentSize(commentSize + 3);
@@ -74,6 +75,10 @@ export default function PostId() {
 
   const handleShowLess = () => {
     setCommentSize(3);
+  };
+
+  const handlePopup = () => {
+    setShowPopup((showPopup) => !showPopup);
   };
 
   return (
@@ -117,17 +122,24 @@ export default function PostId() {
         </div>
         <p className="postIdReview">{postxProfile?.review}</p>
         <div className="ratingStarContainer">
-            {Array.from({ length: postxProfile.rating }, (_, i) => (
-              <img key={i} src={star} alt="star" className="ratingStar" />
-            ))}
-          </div>
+          {Array.from({ length: postxProfile.rating }, (_, i) => (
+            <img key={i} src={star} alt="star" className="ratingStar" />
+          ))}
+        </div>
         <div className="postIdBtns">
           {postxProfile.restaurantId ? (
             <Link to={postxProfile.restaurantId.bookingLink}>Book Her</Link>
           ) : (
             ""
           )}
-          <Link to="">{/* geolocation todo */}Geolocation</Link>
+          <div className="postGeobtn">
+            <button onClick={handlePopup} type="button">
+              Addresse
+            </button>
+            <p className={showPopup ? "popupContainer" : "hidden"}>
+              {postxProfile.geolocation}
+            </p>
+          </div>
         </div>
         <Form method="post" className="postIdCommentForm">
           <input type="text" name="comment" placeholder="kommentar..." />

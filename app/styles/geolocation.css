@@ -1,0 +1,33 @@
+.geoContainer {
+  width: 100vw;
+  height: 100vh;
+}
+
+.geoInputContainer {
+  display: flex;
+  justify-content: center;
+  z-index: 99;
+}
+
+.geoInputAutocomplete {
+  z-index: 99;
+}
+
+.geoInputContainer input {
+  margin: 5px;
+  padding: 5px;
+  font-size: var(--font-size-3);
+}
+
+.geoInputContainer p {
+  cursor: pointer;
+  z-index: 99;
+}
+
+.geoMapContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}

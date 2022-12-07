@@ -112,6 +112,10 @@
   margin-bottom: 2vh;
 }
 
+.geoAutocomplete{
+  width: 100%;
+}
+
 @media screen and (min-width: 600px) {
     .createPostForm {
       width: 500px;
