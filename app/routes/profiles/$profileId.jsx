@@ -151,6 +151,18 @@ export default function ProfileId() {
                 Follow
               </button>
             </Form>
+            {profile.bookingLink !== "" ? (
+              <a
+                href={profile.bookingLink}
+                target="_blank"
+                rel="noreferrer"
+                className="bookingLink"
+              >
+                Book Her
+              </a>
+            ) : (
+              ""
+            )}
           </div>
           <div className="socialMediaIcons">
             {profile.facebook !== "" ? (

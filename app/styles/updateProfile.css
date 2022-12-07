@@ -1,34 +1,43 @@
-.updateProfileForm{
-    padding: 10vh 2vw;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background: var(--background-1);
+.updateProfileContainer {
+  height: 100vh;
+  padding: 10vh 2vw;
+  background: var(--background-1);
+  display: flex;
+  justify-content: center;
 }
 
-.updateProfileForm div{
-    display: flex;
-    margin-top: 2vh;
+.updateProfileForm {
+  display: flex;
+  flex-direction: column;
 }
 
-.updateProfileForm img{
-    margin-right: 1vw;
-
+.updateProfileForm div {
+  display: flex;
+  margin-top: 2vh;
 }
 
-.updateProfileForm input{
-    width: 95%;
+.updateProfileForm img {
+  margin-right: 1vw;
 }
 
-.updateProfileForm button{
-    margin-top: 2vh;
-    margin-left: auto;
-    margin-right: auto;
-    width: 95%;
+.updateProfileForm input {
+  width: 95%;
 }
 
-.updateProfileIcon{
-    width: 40px;
-    height: 40px;
+.updateProfileForm button {
+  margin-top: 2vh;
+  margin-left: auto;
+  margin-right: auto;
+  width: 95%;
 }
 
+.updateProfileIcon {
+  width: 40px;
+  height: 40px;
+}
+
+@media screen and (min-width: 600px) {
+  .updateProfileForm {
+    width: 500px;
+  }
+}

@@ -85,84 +85,95 @@ export default function PostId() {
     <>
       {<Header />}
       <div className="postIdContainer">
-        <div className="postIdHeader">
-          <img
-            src={postxProfile.profileId?.profileImg}
-            alt="profile img"
-            className="profileImgHeader"
-          />
-          <h4 className="postIdUsername">{postxProfile.profileId?.username}</h4>
-        </div>
-        <div className="postIdHeader2">
-          <h3>{postxProfile?.title}</h3>
+          <div className="postIdHeader">
+            <img
+              src={postxProfile.profileId?.profileImg}
+              alt="profile img"
+              className="profileImgHeader"
+            />
+            <h4 className="postIdUsername">
+              {postxProfile.profileId?.username}
+            </h4>
+          </div>
+          <div className="postIdHeader2">
+            <h3>{postxProfile?.title}</h3>
 
-          <Link
-            to={
-              postxProfile.restaurantId
-                ? `/profiles/${postxProfile.restaurantId._id}`
-                : ""
-            }
-            className="postIdRestaurant"
-          >
-            {postxProfile?.restaurantName}{" "}
-          </Link>
-        </div>
-        <div>
-          <img
-            src={postxProfile.postImg}
-            alt="post pic"
-            className="postIdImg"
-          />
-        </div>
+            <Link
+              to={
+                postxProfile.restaurantId
+                  ? `/profiles/${postxProfile.restaurantId._id}`
+                  : ""
+              }
+              className="postIdRestaurant"
+            >
+              {postxProfile?.restaurantName}{" "}
+            </Link>
+          </div>
+          <div>
+            <img
+              src={postxProfile.postImg}
+              alt="post pic"
+              className="postIdImg"
+            />
+          </div>
 
-        <div className="postIdTags">
-          {postxProfile.tags?.map((tags, i) => {
-            return <p key={i}>#{tags}</p>;
-          })}
-        </div>
-        <p className="postIdReview">{postxProfile?.review}</p>
-        <div className="ratingStarContainer">
-          {Array.from({ length: postxProfile.rating }, (_, i) => (
-            <img key={i} src={star} alt="star" className="ratingStar" />
-          ))}
-        </div>
-        <div className="postIdBtns">
-          {postxProfile.restaurantId.bookingLink !== "" ? (
-            <a href={postxProfile.restaurantId.bookingLink} target="_blank" rel="noreferrer">Book Her</a>
-          ) : (
-            ""
-          )}
-          {postxProfile.geolocation !== "" ? (<div className="postGeobtn">
-            <button onClick={handlePopup} type="button">
-              Addresse
-            </button>
-            <p className={showPopup ? "popupContainer" : "hidden"}>
-              {postxProfile.geolocation}
-            </p>
-          </div>) : ""}
-          
-        </div>
-        <Form method="post" className="postIdCommentForm">
-          <input type="text" name="comment" placeholder="kommentar..." />
-          <button type="submit">Post</button>
-        </Form>
-        <div>
-          {postxProfile.comments?.slice(0, commentSize).map((com, i) => {
-            return (
-              <div key={i} className="postIdComments">
-                <h4>{com.username}</h4>
-                <p>{com.comment}</p>
-                <div className="divider"></div>
+          <div className="postIdTags">
+            {postxProfile.tags?.map((tags, i) => {
+              return <p key={i}>#{tags}</p>;
+            })}
+          </div>
+          <p className="postIdReview">{postxProfile?.review}</p>
+          <div className="ratingStarContainer">
+            {Array.from({ length: postxProfile.rating }, (_, i) => (
+              <img key={i} src={star} alt="star" className="ratingStar" />
+            ))}
+          </div>
+          <div className="postIdBtns">
+            {postxProfile?.restaurantId?.bookingLink !== "" ? (
+              <a
+                href={postxProfile?.restaurantId?.bookingLink}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Book Her
+              </a>
+            ) : (
+              ""
+            )}
+            {postxProfile.geolocation !== "" ? (
+              <div className="postGeobtn">
+                <button onClick={handlePopup} type="button">
+                  Addresse
+                </button>
+                <p className={showPopup ? "popupContainer" : "hidden"}>
+                  {postxProfile.geolocation}
+                </p>
               </div>
-            );
-          })}
-        </div>
-        <div className="postIdCommentMore">
-          <p onClick={handleShowMore}>show more comments</p>
-          <p onClick={handleShowLess}>collapse comments</p>
-        </div>
+            ) : (
+              ""
+            )}
+          </div>
+          <Form method="post" className="postIdCommentForm">
+            <input type="text" name="comment" placeholder="kommentar..." />
+            <button type="submit">Post</button>
+          </Form>
+          <div>
+            {postxProfile.comments?.slice(0, commentSize).map((com, i) => {
+              return (
+                <div key={i} className="postIdComments">
+                  <h4>{com.username}</h4>
+                  <p>{com.comment}</p>
+                  <div className="divider"></div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="postIdCommentMore">
+            <p onClick={handleShowMore}>show more comments</p>
+            <p onClick={handleShowLess}>collapse comments</p>
+          </div>
 
-        {actionData?.errormessage}
+          {actionData?.errormessage}
       </div>
       <FooterNav user={userId} userProfile={loggedInUserProfile} />
     </>

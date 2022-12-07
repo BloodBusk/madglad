@@ -55,9 +55,3 @@
 .verifiedIcon {
     width: 10px;
   }
-
-@media screen and (min-width: 600px) {
-    .singlePostContainer {
-      width: 40%;
-    }
-  }

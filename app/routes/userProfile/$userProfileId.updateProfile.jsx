@@ -104,69 +104,89 @@ export default function UpdateProfile() {
   return (
     <>
       <Header />
-      <Form
-        method="post"
-        encType="multipart/form-data"
-        className="updateProfileForm"
-      >
-        <input type="file" name="upload" className="input-1" />
-        <div>
-          <img
-            src={facebook}
-            alt="facebook img"
-            className="updateProfileIcon"
-          />
-          <input
-            type="text"
-            name="facebook"
-            placeholder="place your facebook link here..."
-            className="input-1"
-            defaultValue={profile.facebook}
-          />
-        </div>
-        <div>
-          <img
-            src={instagram}
-            alt="facebook img"
-            className="updateProfileIcon"
-          />
-          <input
-            type="text"
-            name="instagram"
-            placeholder="place your instagram link here..."
-            className="input-1"
-            defaultValue={profile.instagram}
-          />
-        </div>
-        <div>
-          <img src={twitter} alt="facebook img" className="updateProfileIcon" />
-          <input
-            type="text"
-            name="twitter"
-            placeholder="place your twitter link here..."
-            className="input-1"
-            defaultValue={profile.twitter}
-          />
-        </div>
-        <div>
-          <img src={tiktok} alt="facebook img" className="updateProfileIcon" />
-          <input
-            type="text"
-            name="tiktok"
-            placeholder="place your tiktok link here..."
-            className="input-1"
-            defaultValue={profile.tiktok}
-          />
-        </div>
+      <div className="updateProfileContainer">
+        <Form
+          method="post"
+          encType="multipart/form-data"
+          className="updateProfileForm"
+        >
+          <input type="file" name="upload" className="input-1" />
+          <div>
+            <img
+              src={facebook}
+              alt="facebook img"
+              className="updateProfileIcon"
+            />
+            <input
+              type="text"
+              name="facebook"
+              placeholder="place your facebook link here..."
+              className="input-1"
+              defaultValue={profile.facebook}
+            />
+          </div>
+          <div>
+            <img
+              src={instagram}
+              alt="facebook img"
+              className="updateProfileIcon"
+            />
+            <input
+              type="text"
+              name="instagram"
+              placeholder="place your instagram link here..."
+              className="input-1"
+              defaultValue={profile.instagram}
+            />
+          </div>
+          <div>
+            <img
+              src={twitter}
+              alt="facebook img"
+              className="updateProfileIcon"
+            />
+            <input
+              type="text"
+              name="twitter"
+              placeholder="place your twitter link here..."
+              className="input-1"
+              defaultValue={profile.twitter}
+            />
+          </div>
+          <div>
+            <img
+              src={tiktok}
+              alt="facebook img"
+              className="updateProfileIcon"
+            />
+            <input
+              type="text"
+              name="tiktok"
+              placeholder="place your tiktok link here..."
+              className="input-1"
+              defaultValue={profile.tiktok}
+            />
+          </div>
 
-        <div>
-          <input type="text" name="bookingLink" defaultValue={profile.bookingLink} placeholder="place your booking link her..." className="input-1" />
-        </div>
+          {profile.isRestaurant ? (
+            <div>
+              <input
+                type="text"
+                name="bookingLink"
+                defaultValue={profile.bookingLink}
+                placeholder="place your booking link her..."
+                className="input-1"
+              />
+            </div>
+          ) : (
+            ""
+          )}
 
-        <button type="submit" className="button-2">
-          Update
-        </button>
-      </Form>
+          <button type="submit" className="button-2">
+            Update
+          </button>
+        </Form>
+      </div>
       <FooterNav user={user._id} userProfile={profile} />
     </>
   );
