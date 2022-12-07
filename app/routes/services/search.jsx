@@ -55,7 +55,7 @@ export default function Search() {
 
   return (
     <>
-      <Header profile={profile} />
+      <Header />
       <div className="searchContainer">
         <div className="searchField">
           <input
@@ -85,7 +85,7 @@ export default function Search() {
           })}
         </div>
       </div>
-      <FooterNav user={user._id} />
+      <FooterNav user={user._id} userProfile={profile} />
     </>
   );
 }

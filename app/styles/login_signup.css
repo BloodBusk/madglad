@@ -76,7 +76,7 @@
 }
 
 .circleBackground{
-    width: 430px;
+    width: 300px;
     height: 520px;
     position: absolute;
     transform: translate(-50%,-50%);
@@ -92,8 +92,8 @@
 }
 
 .circle:first-child{
-    top: -30px;
-    left: -30px;
+    top: -100px;
+    left: -50px;
     background: var(--color-2);
 }
 .circle:last-child{

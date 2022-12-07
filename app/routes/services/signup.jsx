@@ -9,6 +9,9 @@ import {
 } from "../services/validate.jsx";
 import { useState } from "react";
 
+//components
+import Header from "~/routes/components/header.jsx";
+
 //css
 import style from "~/styles/login_signup.css";
 
@@ -93,6 +96,7 @@ export default function Signup() {
   };
   return (
     <>
+    <Header />
       <div className="logUserContainer">
         <div className="circleBackground">
           <div className="circle"></div>

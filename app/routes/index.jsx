@@ -60,7 +60,7 @@ export default function Index() {
 
   return (
     <>
-    {<Header profile={profile} />}
+    {<Header />}
       <div className="home">
         {postXProfile?.map((post) => {
           return (
@@ -70,7 +70,7 @@ export default function Index() {
           );
         })}
       </div>
-      <FooterNav user={user._id} />
+      <FooterNav user={user._id} userProfile={profile} />
     </>
   );
 }

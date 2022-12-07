@@ -5,6 +5,9 @@ import { useActionData, Form, Link } from "@remix-run/react";
 import connectDb from "~/db/connectDb.server.js";
 import { validateEmptyField } from "../services/validate.jsx";
 
+//components
+import Header from "~/routes/components/header.jsx";
+
 //css
 import style from "~/styles/login_signup.css";
 
@@ -53,6 +56,7 @@ export default function Login() {
   const actionData = useActionData();
   return (
     <>
+    <Header />
       <div className="logUserContainer">
         <div className="circleBackground">
           <div className="circle"></div>

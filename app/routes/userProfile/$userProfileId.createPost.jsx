@@ -167,7 +167,7 @@ export default function CreatePost() {
 
   return (
     <>
-      <Header profile={loggedProfile} />
+      <Header />
       <div className="createPostContainer">
         <Form
           method="post"
@@ -266,7 +266,7 @@ export default function CreatePost() {
           <p className="errorMessages">{actionData?.pathNameErrorMessage}</p>
         </Form>
       </div>
-      <FooterNav user={user._id} />
+      <FooterNav user={user._id} userProfile={loggedProfile} />
     </>
   );
 }

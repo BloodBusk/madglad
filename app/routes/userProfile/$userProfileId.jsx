@@ -156,7 +156,7 @@ export default function UserProfileId() {
 
   return (
     <>
-      <Header profile={profile} />
+      <Header />
       <div className="userProfileContainer">
         <div className="userProfileId_container">
           <div className="profileServiceLinks">
@@ -348,7 +348,7 @@ export default function UserProfileId() {
           })}
         </div>
       </div>
-      <FooterNav user={user._id} />
+      <FooterNav user={user._id} userProfile={profile} />
     </>
   );
 }

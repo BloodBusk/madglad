@@ -101,7 +101,7 @@ export default function UpdateProfile() {
   const { profile, user } = useLoaderData();
   return (
     <>
-      <Header profile={profile} />
+      <Header />
       <Form
         method="post"
         encType="multipart/form-data"
@@ -161,7 +161,7 @@ export default function UpdateProfile() {
           Update
         </button>
       </Form>
-      <FooterNav user={user._id} />
+      <FooterNav user={user._id} userProfile={profile} />
     </>
   );
 }

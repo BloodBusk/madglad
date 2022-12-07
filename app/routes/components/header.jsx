@@ -1,7 +1,7 @@
 import { Link } from "@remix-run/react";
-import defaultProfile from "~/imgs/user.png";
 
-export default function Header({ profile }) {
+
+export default function Header() {
   return (
     <>
       <div className="header">
@@ -11,11 +11,6 @@ export default function Header({ profile }) {
             <span className="logoGlad">Glad</span>
           </Link>
         </h1>
-        <img
-          src={profile.profileImg != "" ? profile.profileImg : defaultProfile}
-          alt="profile img"
-          className="headerProfileImg"
-        />
       </div>
     </>
   );

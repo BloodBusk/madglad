@@ -83,7 +83,7 @@ export default function PostId() {
 
   return (
     <>
-      {<Header profile={loggedInUserProfile} />}
+      {<Header />}
       <div className="postIdContainer">
         <div className="postIdHeader">
           <img
@@ -163,7 +163,7 @@ export default function PostId() {
 
         {actionData?.errormessage}
       </div>
-      <FooterNav user={userId} />
+      <FooterNav user={userId} userProfile={loggedInUserProfile} />
     </>
   );
 }

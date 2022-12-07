@@ -107,7 +107,7 @@ export default function ProfileId() {
   const { profile, postsCount, posts, user, loggedProfile } = useLoaderData();
   return (
     <>
-      <Header profile={loggedProfile} />
+      <Header />
       <div className="userProfileContainer">
         <div className="userProfileId_container">
           <div className="userProfileId_1">
@@ -189,7 +189,7 @@ export default function ProfileId() {
           </div>
         </div>
       </div>
-      <FooterNav user={user._id} />
+      <FooterNav user={user._id} userProfile={loggedProfile} />
     </>
   );
 }
