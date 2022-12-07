@@ -25,11 +25,10 @@ export const loader = async ({ request }) => {
   const db = await connectDb();
   const user = await findUserById(db, userId);
   const profile = await findProfileByUser(db, user);
-  const posts = await findAllPosts(db);
-  const postXProfile = await db.models.Post.find()
+  const postXProfile = await db.models.Post.find().sort({createdAt: -1})
     .populate("profileId")
     .populate("restaurantId");
-  return { profile, user, posts, postXProfile };
+  return { profile, user, postXProfile };
 };
 
 export const action = async ({ request }) => {
@@ -57,7 +56,7 @@ export const action = async ({ request }) => {
 };
 
 export default function Index() {
-  const { profile, user, posts, postXProfile } = useLoaderData();
+  const { profile, user, postXProfile } = useLoaderData();
 
   return (
     <>

@@ -24,6 +24,11 @@ export const findAllPosts = async (db) => {
   return posts;
 };
 
+export const findAllProfiles = async (db) => {
+  const profile = db.models.Profile.find();
+  return profile;
+};
+
 export const findAllRestaurants = async (db) => {
   const restaurants = db.models.Profile.find({isRestaurant: true});
   return restaurants;

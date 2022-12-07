@@ -204,7 +204,7 @@ export default function CreatePost() {
             })}
           </div>
           <textarea type="text" name="review" placeholder="review..." />
-          <label>Rating</label>
+          <label>Rate din oplevelse med maden</label>
           <select name="rating" className="createPostRating">
             <option value="1">1</option>
             <option value="2">2</option>
