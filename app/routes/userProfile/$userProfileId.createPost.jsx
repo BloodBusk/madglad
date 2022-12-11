@@ -20,6 +20,7 @@ import star from "~/imgs/star.svg";
 import Header from "~/routes/components/header.jsx";
 import FooterNav from "~/routes/components/footerNav.jsx";
 
+//css
 import style from "~/styles/createPost.css";
 
 export const links = () => [
@@ -65,7 +66,7 @@ export async function action({ request }) {
   //file handling variables
   const fileUploadHandler = unstable_createFileUploadHandler({
     avoidFileConflicts: true,
-    maxPartSize: 5_000_000,
+    maxPartSize: 500_000,
     directory: "./public/uploads/postPics",
     file: ({ filename }) => filename,
   });
@@ -94,6 +95,7 @@ export async function action({ request }) {
     pathString = pathName.slice(pathSearch - 1);
   }
 
+  //create post
   if (_action === "createPost") {
     try {
       const newPost = await db.models.Post.create({
@@ -140,23 +142,27 @@ export default function CreatePost() {
     }
   });
 
+  //saves input field text into useState
   const saveInput = (e) => {
     setInput(e.target.value);
   };
 
+  //adds input field text into tags usestate
   const addToArray = () => {
     setTags((prevTags) => [...prevTags, input]);
   };
 
+  //removes selected tag item from tags array
   const removeTagItem = (t) => {
     setTags(tags.filter((item, index) => item !== t));
   };
 
+  //adds rating value to rating usestate
   const handleRatingChange = (e) => {
     setRating(e.target.value);
   };
 
-  //maps
+  //google maps api
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: MAPS_API_KEY,
     libraries: ["places"],
@@ -192,8 +198,8 @@ export default function CreatePost() {
             })}
           </datalist>
 
-          {/* todo geolocation */}
-          <Autocomplete >
+          {/* geolocation */}
+          <Autocomplete>
             <input
               type="text"
               name="geolocation"
@@ -202,8 +208,10 @@ export default function CreatePost() {
             />
           </Autocomplete>
 
+          {/* file upload */}
           <input type="file" name="upload" />
           <p className="errorMessages">{actionData?.formErrors?.upload}</p>
+          {/* tags  */}
           <div className="createPostTag">
             <input
               type="text"
@@ -236,7 +244,9 @@ export default function CreatePost() {
               );
             })}
           </div>
+          {/* review */}
           <textarea type="text" name="review" placeholder="review..." />
+          {/* rating */}
           <label>Rate din oplevelse med maden</label>
           <select
             name="rating"
@@ -254,6 +264,7 @@ export default function CreatePost() {
               <img key={i} src={star} alt="star" className="ratingStar" />
             ))}
           </div>
+          {/* submit */}
           <button
             type="submit"
             name="_action"
@@ -262,6 +273,7 @@ export default function CreatePost() {
           >
             Create Post
           </button>
+          {/* some more error messages */}
           <p className="errorMessages">{actionData?.errorMessage}</p>
           <p className="errorMessages">{actionData?.pathNameErrorMessage}</p>
         </Form>
