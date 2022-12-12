@@ -62,6 +62,7 @@ export default function Index() {
     <>
     {<Header />}
       <div className="home">
+        <h2 className="homeTitle">For You Page</h2>
         {postXProfile?.map((post) => {
           return (
             <div key={post._id}>

@@ -3,6 +3,12 @@
     background: rgb(44, 44, 44);
 }
 
+.homeTitle{
+  text-align: center;
+  color: white;
+  font-size: 14px;
+}
+
 @media screen and (min-width: 600px) {
     .home {
       padding: 10vh 10%;
