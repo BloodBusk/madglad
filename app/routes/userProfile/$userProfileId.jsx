@@ -101,6 +101,7 @@ export async function action({ request }) {
       return json(err.errors, { status: 400 });
     }
   }
+  //add user to likes array
   if (_action === "like") {
     try {
       await db.models.Post.updateOne(
@@ -137,17 +138,20 @@ export default function UserProfileId() {
     );
   };
 
+  //uses usestate so trigger delete option via index
   const showDeleteOptions = (index) => {
     setShowDelete((showDelete) => {
       return showDelete === index ? null : index;
     }, setShowSettings(false));
   };
 
+  //resets usestates to false
   const handleDeleteNo = () => {
     setShowDelete(false);
     setShowSettings(false);
   };
 
+  //same as showDeleteOPtions just for edit options
   const showEditOptions = (index) => {
     setShowEdit((showEdit) => {
       return showEdit === index ? null : index;

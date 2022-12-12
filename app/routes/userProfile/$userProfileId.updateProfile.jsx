@@ -78,6 +78,7 @@ export async function action({ request }) {
     pathString = pathName.slice(pathSearch - 1);
   }
 
+  //update profile
   try {
     await db.models.Profile.updateOne(
       { userId: userId },
@@ -110,7 +111,9 @@ export default function UpdateProfile() {
           encType="multipart/form-data"
           className="updateProfileForm"
         >
+          {/* file form */}
           <input type="file" name="upload" className="input-1" />
+          {/* social media links */}
           <div>
             <img
               src={facebook}
@@ -168,6 +171,7 @@ export default function UpdateProfile() {
             />
           </div>
 
+          {/* checks if restaurant and shows content if true */}
           {profile.isRestaurant ? (
             <div>
               <input
